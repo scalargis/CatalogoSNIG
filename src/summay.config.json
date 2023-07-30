@@ -1,0 +1,107 @@
+{
+  "maxDimensions": 5,
+  "maxRows": 5,
+  "dimensions": [
+    {
+      "key": "dataPolicy",
+      "label": "Política de dados",
+      "className": "",
+      "strings": {
+        "dataPolicy_undefined": "Não definida"
+      }
+    },
+    { 
+      "key": "openServiceType",
+      "label": "Serviços",
+      "strings": {
+        "viewAndDowload": "Visualização e descarregamento",
+        "view": "Visualização",
+        "download": "Descarregamento",
+        "openServiceType_undefined": "Sem serviços"
+      }
+    },
+    { 
+      "key": "topicCat",
+      "title": "Tema"
+    },
+    {
+      "key": "orgNameSNIG",
+      "title": "Entidade Responsável",
+      "type": "Search"
+    },
+    {
+      "key": "geographicCoverageDesc",
+      "title": "Cobertura Geográfica",
+      "sortOrder": "Desc",
+      "strings": {
+        "geographicCoverage_undefined": "Não definida"
+      }
+    },
+    {
+      "key": "cartografia",
+      "title": "Cartografia",
+      "strings": {
+        "cartografia_undefined": "Não definida"
+      }
+    },
+    { 
+      "key": "dataType",
+      "title": "Tipo de Dados",
+      "strings": {
+        "vector, shp": "Vector, shp",
+        "dataType_other": "Outros",
+        "dataType_undefined": "Não definido"
+      }
+    },
+    { 
+      "key": "denominatorRange",
+      "title": "Escala",
+      "sortField": "@value",
+      "sortOrder": "Desc",
+      "strings": {
+        "01_100000": "Inferior a 1:100 000",
+        "02_10000_100000": "De 1:10 000 a 1:100 000",
+        "03_10000": "Igual ou superior a 1:10 000",                
+        "denominator_undefined": "Não definida"
+      }
+    },
+    { 
+      "key": "resolutionRange",
+      "title": "Resolução",
+      "sortField": "@value",
+      "sortOrder": "Desc",      
+      "strings": {
+        "01_100": "Inferior a 100 m",        
+        "02_10_100": "De 10 a 100 m",
+        "03_10": "Igual ou superior a 10m",
+        "resolution_undefined": "Não definida"
+      }
+    },
+    { 
+      "key": "referenceDateRange",
+      "title": "Data de Referência",
+      "sortField": "@value",
+      "sortOrder": "Desc",
+      "strings": {
+        "01_2015_higher": "2015 ou posterior",
+        "02_2005_2015": "Entre 2005 e 2015",
+        "03_2005_lower": "Anterior a 2005"
+      }
+    },
+    { 
+      "key": "inspirecore",
+      "title": "Reportados Diretiva INSPIRE",
+      "strings": {
+        "INSPIRECORE": "Sim"
+      }
+    },
+    { 
+      "key": "dataFormat",
+      "title": "Formatos de Distribuição",
+      "strings": {
+        "dataFormat_other": "Outros",
+        "dataFormat_undefined": "Não definido"
+      }
+    }   
+  ]
+}

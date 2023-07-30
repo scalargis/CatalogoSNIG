@@ -1,0 +1,1 @@
+export const SNIG_URL = 'https://snig.dgterritorio.gov.pt/rndg';
