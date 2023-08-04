@@ -1,0 +1,15 @@
+{
+	"id": "catalogosnig_apa",
+	"title": "Catálogo SNIG - APA",
+	"url": "https://snig.dgterritorio.gov.pt/rndg",
+    "content_header": {
+		"link_url": "https://sniamb.apambiente.pt/",	
+		"img": "https://sniamb.apambiente.pt/sites/all/themes/sniamb_theme/logo_pt-pt.png",
+		"img_title": "Abrir Site da Agência Portuguesa do Ambiente"
+  },
+	"overrideDefaultFilter": false,
+	"defaultFilters": {
+		"orgNameSNIG": "Agência Portuguesa do Ambiente, I.P.",
+		"keyword": "APA"
+	}	
+}

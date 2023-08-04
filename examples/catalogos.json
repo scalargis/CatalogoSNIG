@@ -1,0 +1,65 @@
+[
+  {
+    "id": "catalogosnig",
+    "title": "Catálogo SNIG",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig.json",
+    "help": {
+      "as": "external",
+      "url": "https://snig.dgterritorio.gov.pt/rndg"
+    }
+  }, 
+  {
+    "id": "catalogsnig_opendata",
+    "title": "Catálogo SNIG - Dados Abertos",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_opendata.json",
+    "help": {
+      "as": "popup",
+      "html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>"
+    }
+  },
+  {
+    "id": "catalogsnig_dgt",
+    "title": "Catálogo SNIG - DGT",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_dgt.json",
+    "help": {
+      "as": "external",
+      "url": "https://snig.dgterritorio.gov.pt/rndg"	  
+    }
+  },
+  {
+    "id": "catalogosnig_apa",
+    "title": "Catálogo SNIG - Agência Portuguesa do Ambiente",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_apa.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://sniamb.apambiente.pt/content/cat%C3%A1logo"
+    }
+  },
+  {
+    "id": "catalogoidea",
+    "title": "Catálogo IDEiA",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/ideia.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://sma.idea.azores.gov.pt/geonetwork"
+    }
+  },
+  {
+    "id": "catalogoih",
+    "title": "Catálogo Instituto Hidrográfico",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/ih.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://metadata.hidrografico.pt/geonetwork"
+    }
+  },
+  {
+    "id": "catalogoportimao",
+    "title": "Catálogo Portimão",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/portimao.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://geoportal.cm-portimao.pt/geonetwork"
+    }
+  }  
+]

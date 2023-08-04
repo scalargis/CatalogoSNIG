@@ -1,0 +1,114 @@
+{
+	"id": "catalogoih",
+	"title": "Catálogo Instituto Hidrográfico",
+	"content_header": {
+	  "html": "<a href='https://www.hidrografico.pt/op/34' target='_blank'><img style='width: 50%' src='data:image/png;base64,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' /></a>"
+	},
+	"url": "https://metadata.hidrografico.pt/geonetwork",
+	"search_action": "searchCatalog",
+	"sortOptions": [
+		{"value": "relevance", "label": "Relevância"},
+		{"value": "title", "label": "Título"}
+	  ],
+	"sortBy": "relevance",
+	"float_labels": true,
+	"filters": [
+	  {
+		"id": "what",
+		"type": "Any",
+		"label": "O quê?",
+		"query": "anylight",
+		"options": {
+		  "multi": true,
+		  "forceSelection": false,
+		  "suggest": {
+			"path": "/srv/por/suggest",
+			"field": "anylight",
+			"sortBy": "STARTSWITHFIRST",
+			"filterField": "",
+			"filterValue": ""
+		  }
+		}
+	  },
+	  {
+		"id": "keyword2",
+		"type": "List",
+		"label": "Palavra-chave?",
+		"query": "keyword",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "source": {
+			"type": "suggests",
+			"path": "/srv/por/suggest",
+			"field": "keyword",
+			"sortBy": "STARTSWITHFIRST"
+		  }
+		}
+	  },
+	  {
+		"id": "orgname",
+		"type": "List",
+		"label": "Entidade Responsável",
+		"query": "orgName",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "source": {
+			"type": "suggests",
+			"path": "/srv/por/suggest",
+			"field": "orgName",
+			"sortBy": "STARTSWITHFIRST"
+		  }
+		}
+	  },
+	  {
+		"id": "topic",
+		"type": "Tags",
+		"label": "Tópicos",
+		"query": "_cat",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "field": "code",
+		  "source": {
+			"path": "/srv/api/0.1/tags",
+			"lang": "por"
+		  }
+		}
+	  },
+	  {
+		"id": "resource_date",
+		"type": "DateRange",
+		"label": "Criação do Recurso",
+		"query": ["creationDateFrom", "creationDateTo"]
+	  },
+	  {
+		"id": "metadata_date",
+		"type": "DateRange",
+		"label": "Criação dos Metadados",
+		"query": ["dateFrom", "dateTo"]
+	  }
+	],
+	"summary": {
+	  "use_default": false,
+	  "maxDimensions": 5,
+	  "strings": {
+		"type": "Tipos de Recursos",
+		"topicCat": "Tópicos",
+		"keyword": "Palavras-chave",
+		"service-view": "Visualização",
+		"service-download": "Descarregamento",
+		"service-discovery": "Pesquisa",
+		"service-transformation": "Processamento"
+	  }
+	},
+	"allow_add_map": true,
+	"allow_service_types": [
+	  "WMS",
+	  "WMTS"
+	]
+}
