@@ -52,5 +52,14 @@
 	  "as": "external",
 	  "url": "https://metadata.hidrografico.pt/geonetwork"
     }
-  }
+  },
+  {
+    "id": "catalogoportimao",
+    "title": "Catálogo Portimão",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/portimao.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://geoportal.cm-portimao.pt/geonetwork"
+    }
+  }  
 ]
