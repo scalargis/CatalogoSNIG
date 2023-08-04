@@ -1,0 +1,131 @@
+{
+	"id": "catalogoidea",
+	"title": "Catálogo IDEiA",
+	"classname": "metadata-catalog",
+	"description": "A IDEiA – Infraestrutura de Dados Espaciais Interativa dos Açores constitui um projeto na área dos Sistemas de Informação Geográfica - SIG, que tem como principal objetivo o desenvolvimento e a gestão de uma infraestrutura de dados geográficos (IDE – Infraestrutura de Dados Espaciais) de referência para a Região Açores",
+	"content_header": {
+	  "html": "<a href='http://www.ideia.azores.gov.pt/' target='_blank'><img style='width: 50%'' src='https://geo2.dgterritorio.gov.pt/geoportal_dev/static/data/catalogos/Logo_IDEiA.png' /></a>"
+	},
+	"url": "https://sma.idea.azores.gov.pt/geonetwork",
+	"search_action": "searchCatalog",
+	"sortOptions": [
+	  {
+		"value": "relevance",
+		"label": "Relevância"
+	  },
+	  {
+		"value": "title",
+		"label": "Título"
+	  }
+	],
+	"sortBy": "relevance",
+	"float_labels": true,
+	"filters": [
+	  {
+		"id": "what",
+		"type": "Any",
+		"label": "O quê?",
+		"query": "anylight",
+		"options": {
+		  "multi": true,
+		  "forceSelection": false,
+		  "suggest": {
+			"path": "/srv/por/suggest",
+			"field": "anylight",
+			"sortBy": "STARTSWITHFIRST",
+			"filterField": "",
+			"filterValue": ""
+		  }
+		}
+	  },
+	  {
+		"id": "keyword2",
+		"type": "List",
+		"label": "Palavra-chave?",
+		"query": "keyword",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "source": {
+			"type": "suggests",
+			"path": "/srv/por/suggest",
+			"field": "keyword",
+			"sortBy": "STARTSWITHFIRST"
+		  }
+		}
+	  },
+	  {
+		"id": "orgname",
+		"type": "List",
+		"label": "Entidade Responsável",
+		"query": "orgName",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "source": {
+			"type": "suggests",
+			"path": "/srv/por/suggest",
+			"_field": "keyword",
+			"field": "orgName",
+			"sortBy": "STARTSWITHFIRST"
+		  }
+		}
+	  },
+	  {
+		"id": "topic",
+		"type": "Tags",
+		"label": "Tópicos",
+		"query": "_cat",
+		"sortField": "name",
+		"sortOrder": "Asc",
+		"options": {
+		  "multi": true,
+		  "forceSelection": true,
+		  "mode": "any",
+		  "field": "code",
+		  "source": {
+			"path": "/srv/api/0.1/tags",
+			"lang": "por"
+		  }
+		}
+	  },
+	  {
+		"id": "resource_date",
+		"type": "DateRange",
+		"label": "Criação do Recurso",
+		"query": [
+		  "creationDateFrom",
+		  "creationDateTo"
+		]
+	  },
+	  {
+		"id": "metadata_date",
+		"type": "DateRange",
+		"label": "Criação dos Metadados",
+		"query": [
+		  "dateFrom",
+		  "dateTo"
+		]
+	  }
+	],
+	"summary": {
+	  "use_default": false,
+	  "_maxDimensions": 5,
+	  "strings": {
+		"type": "Tipos de Recursos",
+		"topicCat": "Tópicos",
+		"keyword": "Palavras-chave",
+		"service-view": "Visualização",
+		"service-download": "Descarregamento",
+		"service-discovery": "Pesquisa",
+		"service-transformation": "Processamento"
+	  }
+	},
+	"allow_add_map": true,
+	"_allow_service_types": [
+	  "WMS",
+	  "WMTS"
+	]
+}

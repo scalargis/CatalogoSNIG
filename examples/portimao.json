@@ -1,0 +1,41 @@
+ {
+    "id": "catalogoportimao",
+    "title": "Catálogo Portimão",
+    "url": "https://geoportal.cm-portimao.pt/geonetwork",
+    "metadata_url": "/srv/por/catalog.search#/metadata/{uuid}",
+    "content_header": {
+		"link_url": "https://geoportal.cm-portimao.pt",	
+		"img": "https://www.cm-portimao.pt/images/frontpage/elementosGraficos/logoCMPCor.png",
+		"img_title": "Abrir Portal IDE Portimão"
+    },
+	"sortBy": "relevance",
+	"sortOptions": [
+		{"label": "Relevância", "value": "relevance"},
+		{"label": "Data de modificação", "value": "changeDate"},
+        {"label": "Título", "value": "title"}
+	],	
+    "filters": [
+      {
+        "id": "what",
+        "type": "Any",
+        "label": "O quê?",
+        "query": "anylight",
+        "options": {
+          "multi": true,
+          "forceSelection": false,
+          "suggest": {
+            "path": "/srv/por/suggest",
+            "field": "anylight",
+            "sortBy": "STARTSWITHFIRST",
+            "filterField": "",
+            "filterValue": ""
+          }
+        }
+      }
+    ],
+    "allow_add_map": true,
+    "_allow_service_types": [
+      "WMS",
+      "WMTS"
+    ]
+ }

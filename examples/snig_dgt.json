@@ -1,0 +1,22 @@
+{
+	"id": "catalogosnig_dgt",
+	"title": "Catálogo SNIG",
+	"url": "https://snig.dgterritorio.gov.pt/rndg",
+    "content_header": {
+		"link_url": "https://www.dgterritorio.gov.pt/dados-abertos",	
+		"img": "https://www.dgterritorio.gov.pt/sites/default/files/DGT.png",
+		"img_title": "Abrir Site da Direção-Geral do Território"
+    },	
+	"_sortBy": "orgNameSNIG",
+	"_sortOptions": [
+		{"label": "Data de referência", "value": "referenceDateOrd"},
+		{"label": "Entidade responsável", "value": "orgNameSNIG"},
+        {"label": "Título", "value": "title"},
+        {"label": "Tema", "value": "topicCatLang"}
+	],
+	"overrideDefaultFilter": false,
+	"defaultFilters": {
+		"dataPolicy": "Dados abertos",
+		"keyword": "DGT"
+	}	
+}
