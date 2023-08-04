@@ -15,7 +15,7 @@ cd scalargis/scalargis-client/packages/viewer/src/components
 git clone https://github.com/scalargis/CatalogoSNIG.git
 ```
 
-A operação anterior dar origem à seguinte diretoria:
+A operação anterior resulta na criação da seguinte diretoria:
 `/packages/viewer/src/components/CatalogoSNIG`
 
 Depois realizada a clonagem do projeto, será necessário fazer novo *build* do viewer do ScalarGIS e *deploy* no scalargis-server:
