@@ -253,7 +253,7 @@ A utilização de múltiplos catálogos pode ser realizada através da seguinte 
 }
 ```
 
-Como pode ser verificado no exemplo anterior, a definição dos catálogos a utilizar pode ser realizada num ficheiro externo, sendo a localização desse ficheiro especificada através da propriedade `config_json.catalogs.url`. O seguinte código mostra o possível conteúdo de uma ficheiro de configuração de catálogos ([ver exemplo mais completo](https://github.com/scalargis/CatalogoSNIG/blob/main/examples/catalogos.json)):
+Como pode ser verificado no exemplo anterior, a definição dos catálogos a utilizar pode ser realizada num ficheiro externo, sendo a localização desse ficheiro especificada através da propriedade `config_json.catalogs.url`. O seguinte código mostra o possível conteúdo de um ficheiro de configuração de catálogos ([ver exemplo mais completo](https://github.com/scalargis/CatalogoSNIG/blob/main/examples/catalogos.json)):
 
 ```
 [
