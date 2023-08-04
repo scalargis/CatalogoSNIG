@@ -34,7 +34,7 @@
       }
     ],
     "allow_add_map": true,
-    "_allow_service_types": [
+    "allow_service_types": [
       "WMS",
       "WMTS"
     ]

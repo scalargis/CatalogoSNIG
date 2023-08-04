@@ -2,6 +2,7 @@
 	"id": "catalogosnig_opendata",
 	"title": "Catálogo SNIG",
 	"url": "https://snig.dgterritorio.gov.pt/rndg",
+	"sortBy": "orgNameSNIG",
 	"overrideDefaultFilter": false,
 	"defaultFilters": {
 		"dataPolicy": "Dados abertos"

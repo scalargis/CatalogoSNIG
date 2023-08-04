@@ -59,7 +59,6 @@
 		  "source": {
 			"type": "suggests",
 			"path": "/srv/por/suggest",
-			"_field": "keyword",
 			"field": "orgName",
 			"sortBy": "STARTSWITHFIRST"
 		  }
@@ -96,7 +95,7 @@
 	],
 	"summary": {
 	  "use_default": false,
-	  "_maxDimensions": 5,
+	  "maxDimensions": 5,
 	  "strings": {
 		"type": "Tipos de Recursos",
 		"topicCat": "Tópicos",
@@ -108,7 +107,7 @@
 	  }
 	},
 	"allow_add_map": true,
-	"_allow_service_types": [
+	"allow_service_types": [
 	  "WMS",
 	  "WMTS"
 	]
