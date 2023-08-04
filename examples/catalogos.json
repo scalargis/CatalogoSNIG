@@ -34,5 +34,14 @@
 	  "as": "external",
 	  "url": "https://sniamb.apambiente.pt/content/cat%C3%A1logo"
     }
+  },
+  {
+    "id": "catalogoidea",
+    "title": "Catálogo IDEiA",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/ideia.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://sma.idea.azores.gov.pt/geonetwork"
+    }
   }
 ]
