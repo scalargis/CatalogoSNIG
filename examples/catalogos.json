@@ -43,5 +43,14 @@
 	  "as": "external",
 	  "url": "https://sma.idea.azores.gov.pt/geonetwork"
     }
+  },
+  {
+    "id": "catalogoih",
+    "title": "Catálogo Instituto Hidrográfico",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/ih.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://metadata.hidrografico.pt/geonetwork"
+    }
   }
 ]
