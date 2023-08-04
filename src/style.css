@@ -98,6 +98,7 @@
   white-space: nowrap;
   font-size: 13px !important;
   font-weight: bold;
+  max-width: calc(100% - 45px);
 }    
 .catolog-snig .metadata-list .facet-item .facet-item-label:hover {
   color: #337ab7;
@@ -154,6 +155,10 @@
 .catolog-snig .facet.facet-search .facet-search-list {
   max-height: 200px;
   overflow-y: auto
+}
+
+.catolog-snig .facet.facet-search .facet-search-list .facet-item .facet-item-label {
+  max-width: calc(100% - 30px);
 }
 
 .catolog-snig .p-inputgroup .btn-help {
