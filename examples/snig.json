@@ -6,7 +6,7 @@
 	"sortOptions": [
 		{"label": "Data de referência", "value": "referenceDateOrd"},
 		{"label": "Entidade responsável", "value": "orgNameSNIG"},
-        {"label": "Título", "value": "title"},
-        {"label": "Tema", "value": "topicCatLang"}
+    {"label": "Título", "value": "title"},
+    {"label": "Tema", "value": "topicCatLang"}
 	]
 }
