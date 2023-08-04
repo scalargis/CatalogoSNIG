@@ -25,5 +25,14 @@
       "as": "external",
       "url": "https://snig.dgterritorio.gov.pt/rndg"	  
     }
+  },
+  {
+    "id": "catalogosnig_apa",
+    "title": "Catálogo SNIG - Agência Portuguesa do Ambiente",
+    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_apa.json",
+    "help": {
+	  "as": "external",
+	  "url": "https://sniamb.apambiente.pt/content/cat%C3%A1logo"
+    }
   }
 ]
