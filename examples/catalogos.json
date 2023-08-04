@@ -14,7 +14,7 @@
     "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_opendata.json",
     "help": {
       "as": "popup",
-      "html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>",
+      "html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>"
     }
   },
   {
