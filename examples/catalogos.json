@@ -4,32 +4,17 @@
     "title": "Catálogo SNIG",
     "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig.json",
     "help": {
-      "_as": "popup",
-      "_html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>",
       "as": "external",
       "url": "https://snig.dgterritorio.gov.pt/rndg"
     }
-  },
-  {
-    "id": "catalogosnig_total",
-    "title": "Catálogo SNIG - Total",
-    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_total.json",
-    "help": {
-      "_as": "popup",
-      "_html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>",
-      "as": "external",
-      "url": "https://snig.dgterritorio.gov.pt/rndg"
-    }
-  },  
+  }, 
   {
     "id": "catalogsnig_opendata",
     "title": "Catálogo SNIG - Dados Abertos",
     "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/examples/examples/snig_opendata.json",
     "help": {
-      "_as": "popup",
-      "_html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>",
-      "as": "external",
-      "url": "https://snig.dgterritorio.gov.pt/rndg"	  
+      "as": "popup",
+      "html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>",
     }
   },
   {
