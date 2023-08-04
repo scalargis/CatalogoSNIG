@@ -94,7 +94,7 @@ A configuração do componente CatalogoSNIG num visualizador faz-se de forma sem
 }
 ```
 
-Como se pode verificar pelo exemplo anterior, o componente foi desenvolvido de forma a que a integração com o catálogo do SNIG seja a mais simples possível em termos de configuração. Caso se pretenda integrar com outro catálogo de metadados (com a limitação de ter que ser baseado em GeoNetwork 3.x),  existem diversos parâmetros que permitem ajustar o componente às características do catálogo a integrar ou simplesmente para alterar o modo como é realizada a pesquisa ou são apresentados os resultados. Na configuração que se apresenta em seguida constam alguns dos parâmetros que permitem ajustar o comportamento do componente:
+Como se pode verificar pelo exemplo anterior, o componente foi desenvolvido de forma a simplificar o mais possível a integração com o catálogo do SNIG. Caso se pretenda integrar com outro catálogo de metadados (com a limitação de ter que ser baseado em GeoNetwork 3.x),  existem diversos parâmetros que permitem ajustar o componente às características do catálogo a integrar  ou simplesmente para alterar o modo como é realizada a pesquisa ou são apresentados os resultados. Na configuração que se apresenta em seguida constam alguns dos parâmetros que permitem ajustar o comportamento do componente:
 
 ```
 {
@@ -253,7 +253,7 @@ A utilização de múltiplos catálogos pode ser realizada através da seguinte 
 }
 ```
 
-Como pode ser verificado no exemplo anterior, a definição dos catálogos a utilizar pode ser realizada num ficheiro externo, sendo a localização desse ficheiro especificada através da propriedade `config_json.catalogs.url`. O seguinte código mostra o possível conteúdo de uma ficheiro de configuração de catálogos ([ver exemplo mais completo](https://https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/catalogos.json)):
+Como pode ser verificado no exemplo anterior, a definição dos catálogos a utilizar pode ser realizada num ficheiro externo, sendo a localização desse ficheiro especificada através da propriedade `config_json.catalogs.url`. O seguinte código mostra o possível conteúdo de uma ficheiro de configuração de catálogos ([ver exemplo mais completo](https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/catalogos.json)):
 
 ```
 [
@@ -279,5 +279,5 @@ Como pode ser verificado no exemplo anterior, a definição dos catálogos a uti
 ```
 
 A configuração de cada catálogo também pode ser realizada através de um ficheiro externo, cuja localização é definida na propriedade `config_url`. Diversos exemplos de configuração de catálogos podem ser consultados em:
-[https://github.com/scalargis/CatalogoSNIG/tree/main/examples](https://https://github.com/scalargis/CatalogoSNIG/tree/main/examples).
+[https://github.com/scalargis/CatalogoSNIG/tree/main/examples](https://github.com/scalargis/CatalogoSNIG/tree/main/examples).
 
