@@ -2,8 +2,8 @@
 	"id": "catalogosnig",
 	"title": "Catálogo SNIG",
 	"url": "https://snig.dgterritorio.gov.pt/rndg",
-	"_sortBy": "orgNameSNIG",
-	"_sortOptions": [
+	"sortBy": "orgNameSNIG",
+	"sortOptions": [
 		{"label": "Data de referência", "value": "referenceDateOrd"},
 		{"label": "Entidade responsável", "value": "orgNameSNIG"},
         {"label": "Título", "value": "title"},
