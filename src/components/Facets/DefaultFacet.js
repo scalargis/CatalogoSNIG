@@ -44,8 +44,8 @@ const DefaultFacet = ({ core, utils, facetId, config, title, items, selectedFace
     return (
       <li key={index} onClick={(e) => {onClickFacetItem(facetId, item["@value"]);}}>
         <label className={`facet-item ${selectedFacets.includes(item["@value"]) ? ' facet-item-selected' : ''}`}>
-          <span class="facet-item-label">{item["@label"]}</span>
-          <span class="facet-item-count p-ml-1">({item["@count"]})</span>
+          <span className="facet-item-label">{item["@label"]}</span>
+          <span className="facet-item-count p-ml-1">({item["@count"]})</span>
         </label>
       </li>
     )
