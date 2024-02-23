@@ -13,7 +13,8 @@ import './style.css';
 
 
 export default function MetadataList({ core, viewer, mainMap, utils, actions, componentConfig, data, setCollapsedFacets,
-  onSearch, onClearSearch, onSort, onClickFacet, onClickFacetItem, filters, filtersItems, onFilterChange }) {
+  onSearch, onClearSearch, onSort, onClickFacet, onClickFacetItem, filters, filtersItems, onFilterChange,
+  onRecordHover, onRecordClick }) {
 
   const childProps = {
     core,
@@ -21,7 +22,9 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
     mainMap,
     utils,
     actions,
-    componentConfig
+    componentConfig,
+    onRecordHover,
+    onRecordClick
   }
 
   const url = getServiceUrl(componentConfig.url);

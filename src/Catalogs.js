@@ -5,7 +5,7 @@ import { Message } from 'primereact/message';
 import CatalogSNIG from './CatalogSNIG';
 import { Help } from './components/Help';
 
-export default function Catalogs ({core, viewer, mainMap, config, actions, record, utils, blockPanel}) {
+export default function Catalogs ({core, viewer, mainMap, config, actions, record, utils, componentId, extentsLayer, blockPanel}) {
 
   const [selected, setSelected] = useState(-1);
 
@@ -75,6 +75,8 @@ export default function Catalogs ({core, viewer, mainMap, config, actions, recor
         mainMap={mainMap}
         catalog={catalog}
         utils={utils}
+        componentId={componentId}
+        extentsLayer={extentsLayer}
         blockPanel={blockPanel}
       /> }
 

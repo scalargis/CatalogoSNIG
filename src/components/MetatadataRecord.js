@@ -48,7 +48,7 @@ const getTopicCat = (data) => {
 }
 
 
-export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data }) {
+export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data, onRecordHover, onRecordClick }) {
 
   let metadata_url = componentConfig.url + (componentConfig?.metadata_url || '/srv/por/catalog.search#/metadata/');
   if (metadata_url.indexOf('{uuid}') > -1) {
@@ -74,32 +74,55 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
       </div>
     </div>
   );
+
+
+  const title = <div> 
+      {
+        (componentConfig?.show_record_extent || componentConfig?.show_record_extent == null) ?
+          <a href="#"
+            onMouseOver={(e) => {
+              e.preventDefault();
+              onRecordHover && onRecordHover(data);
+            }}
+            onMouseOut={(e) => {
+              e.preventDefault();
+              onRecordHover && onRecordHover(null);
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              onRecordClick && onRecordClick(data);
+            }}
+          >{data.title || data.defaultTitle}</a>
+        : data.title || data.defaultTitle
+      }
+    </div>
   
   const responsibleParty = getResponsibleParty(data);
   const referenceDate = getReferenceDate(data);
   const topicCat = getTopicCat(data);
 
   return (
-    <Card title={data.title || data.defaultTitle} subTitle={responsibleParty?.resource || responsibleParty?.distribution || ''} footer={footer} header={null} className="p-mb-2">
-      { referenceDate && <div className="p-mt-1">
-        <span className="p-text-bold">Data de Referência{referenceDate ? ` (${referenceDate.type})` : ''}: </span>
-        <span>{referenceDate ? referenceDate.value : ''}</span>
-      </div> }
-      { topicCat && <div className="p-mt-1">
-        <span className="p-text-bold">Tema(s): </span>
-        <span>{topicCat || ''}</span>
-      </div> }
-      { data?.geographicCoverageDesc && <div className="p-mt-1">
-        <span className="p-text-bold">Cobertura: </span>
-        {Array.isArray(data?.geographicCoverageDesc) && data.geographicCoverageDesc.length ? 
-          <div>
-            {data.geographicCoverageDesc.map((g) => <span>{g.geographicCoverageDesc} </span>)}
-          </div>
-        : <span>{data?.geographicCoverageDesc}</span> }
-      </div> }      
-      <div className="p-mt-2" style={{"wordBreak": "break-word"}}>
-        <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
-      </div>
+    <Card title={title} subTitle={responsibleParty?.resource || responsibleParty?.distribution || ''} 
+      footer={footer} header={null} className="p-mb-2">
+        { referenceDate && <div className="p-mt-1">
+          <span className="p-text-bold">Data de Referência{referenceDate ? ` (${referenceDate.type})` : ''}: </span>
+          <span>{referenceDate ? referenceDate.value : ''}</span>
+        </div> }
+        { topicCat && <div className="p-mt-1">
+          <span className="p-text-bold">Tema(s): </span>
+          <span>{topicCat || ''}</span>
+        </div> }
+        { data?.geographicCoverageDesc && <div className="p-mt-1">
+          <span className="p-text-bold">Cobertura: </span>
+          {Array.isArray(data?.geographicCoverageDesc) && data.geographicCoverageDesc.length ? 
+            <div>
+              {data.geographicCoverageDesc.map((g, idx) => <span key={idx}>{g.geographicCoverageDesc} </span>)}
+            </div>
+          : <span>{data?.geographicCoverageDesc}</span> }
+        </div> }      
+        <div className="p-mt-2" style={{"wordBreak": "break-word"}}>
+          <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
+        </div>
     </Card>
   )
 }

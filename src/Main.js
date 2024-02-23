@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { Panel } from 'primereact/panel';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 import Catalogs from './Catalogs';
 import CatalogSNIG from './CatalogSNIG';
-
 
 
 /**
@@ -56,6 +55,7 @@ export default function Main(props) {
   
   const className = config?.classname ? `catolog-snig ${config?.classname}` : 'catolog-snig';
 
+
   const getBlockFullHeight = () => {
 
     const oDiv = ref.current;
@@ -91,7 +91,8 @@ export default function Main(props) {
           mainMap={mainMap}
           record={record?.config_json}
           utils={utils}
-          blockPanel={setBlockedPanel}        
+          componentId={record?.id}
+          blockPanel={setBlockedPanel}
         />
       )
     }
@@ -105,6 +106,7 @@ export default function Main(props) {
         mainMap={mainMap}
         catalog={record?.config_json}
         utils={utils}
+        componentId={record?.id}
         blockPanel={setBlockedPanel}
       />  
     )  

@@ -7,6 +7,18 @@
   "config_json": {
     "classname": "metadata-catalog",
     "url": "https://snig.dgterritorio.gov.pt/rndg",
+    "show_extents": true,
+    "show_record_extent": true,
+    "extents_style": {
+      "style_color": "55, 255, 255, 0",
+      "style_stroke_color": "0, 255, 0, 0.5",
+      "style_stroke_width": 4
+    },
+    "record_extent_style": {
+      "style_color": "55, 255, 255, 0",
+      "style_stroke_color": "255, 0, 0, 1",
+      "style_stroke_width": 5
+    },
     "filters": [
       {
         "id": "what",

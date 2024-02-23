@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { Message } from 'primereact/message';
+
+import VectorLayer from 'ol/layer/Vector'
+import { Vector } from 'ol/source';
+import Feature from 'ol/Feature';
+import MultiPolygon from 'ol/geom/MultiPolygon';
+import {fromExtent} from 'ol/geom/Polygon';
+import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
 
 import Header from './components/Header';
 import HeaderSNIG from './components/HeaderSNIG';
@@ -10,6 +17,7 @@ import Filters from './components/Filters';
 import MetadataList from './MetadataList';
 import dataProvider from './utils/dataProvider';
 import { getServiceUrl } from './utils';
+import { create } from 'domain';
 
 
 const defaultFilters = [
@@ -37,14 +45,82 @@ const defaultSearchParams = {
   sortOrder: ''
 };
 
+const _selectedExtentStyle = new Style({
+  fill: new Fill({
+    color: 'rgba(255, 255, 255, 0)',
+  }),
+  stroke: new Stroke({
+    color: 'rgba(255, 255, 0, 1)',
+    width: 5,
+  }),
+  image: new CircleStyle({
+    radius: 6,
+    fill: new Fill({
+      color: 'rgba(255, 0, 0, 0.5)',
+    }),
+    stroke: new Stroke({
+      //color: '#fff',
+      color: 'rgba(255, 255, 255, 0.5)',
+      width: 2,
+    })
+  })    
+});
+
+const _extentStyle = new Style({
+  fill: new Fill({
+    color: 'rgba(255, 255, 255, 0)',
+  }),
+  stroke: new Stroke({
+    color: 'rgba(255, 0, 0, 0.5)',
+    width: 4,
+  }),
+  image: new CircleStyle({
+    radius: 6,
+    fill: new Fill({
+      color: 'rgba(255, 0, 0, 0.5)',
+    }),
+    stroke: new Stroke({
+      //color: '#fff',
+      color: 'rgba(255, 255, 255, 0.5)',
+      width: 2,
+    })
+  })    
+});
+
+const defaultExtentStyle = {
+  "style_color": "255, 255, 255, 0",
+  "style_stroke_color": "255, 0, 0, 0.5",
+  "style_stroke_width": 4
+}
+
+const defaultSelectedExtentStyle = {
+  "style_color": "255, 255, 255, 0",
+  "style_stroke_color": "255, 255, 0, 1",
+  "style_stroke_width": 5
+}
+
+const buildStyle = (styleFn, style, defaultStyle) => {
+  let new_style = {...defaultStyle}
+  if (style) {
+    new_style = {
+      ...new_style,
+      ...style
+    }
+  }
+  return styleFn(new_style);
+}
+
 let toastEl = null;
 
 
-export default function CatalogSNIG({ core, viewer, mainMap, config, actions, catalog, utils, blockPanel }) {
+export default function CatalogSNIG({ core, viewer, mainMap, config, actions, catalog, utils, componentId, blockPanel }) {
 
-    const { showOnPortal, getWindowSize } = utils;
+  const { selected_menu } = viewer.config_json
+  const { dispatch, Models } = config;
+  const { createStyle} = Models.MapModel;
+  const { showOnPortal, getWindowSize } = utils;
 
-    const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const [panel, setPanel] = useState(null);
 
@@ -78,6 +154,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
  
   const [data, setData] = useState(null);
 
+  const [activeRecord, setActiveRecord] = useState(null);
+
   const [filters, setFilters] = useState(catalog_cfg?.filters?.length ? 
     [...catalog_cfg?.filters] : 
     [...defaultFilters]
@@ -86,11 +164,75 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   const [collapsedFacets, setCollapsedFacets] = useState([]);
   const [selectedFacetValues, setSelectedFacetValues] = useState([]);
+  
+  /*
+  const [extentStyle] = useState(createStyle(catalog?.extents_style || defaultExtentStyle));
+  const [selectedExtentStyle] = useState(createStyle(catalog?.record_extent_style || defaultSelectedExtentStyle));
+  */
+
+  const [extentStyle] = useState(buildStyle(createStyle, catalog?.extents_style, defaultExtentStyle));
+  const [selectedExtentStyle] = useState(buildStyle(createStyle, catalog?.record_extent_style, defaultSelectedExtentStyle));
+
+  const extentsLayer = useRef();
+
 
   const wsize = getWindowSize();
 
   const url = getServiceUrl(catalog_cfg?.url);
- 
+
+  const buildExtentFromGeoBox = (geoBox) => {
+    const extents = [];
+
+    const inProj = "EPSG:4326";
+    const outProj = mainMap.getView().getProjection();
+    
+    if (Array.isArray(geoBox)) {
+      geoBox.forEach(b => {
+        let bbox = (b || "").split("|");
+        if (bbox.length) {
+          bbox = bbox.map(p => parseFloat(p));
+          extents.push(bbox);
+        }
+      });
+    } else {
+      let bbox = (geoBox || "").split("|");
+      if (bbox.length) {
+        bbox = bbox.map(p => parseFloat(p));
+        extents.push(bbox);
+      }
+    }
+
+    // A metadata record can have multiple extents
+    const multiPolygon = new MultiPolygon([]);
+    extents.forEach(bbox => {
+      try {
+        // Create a polygon based on the array of coordinates
+        const polygon = new fromExtent(bbox);
+        multiPolygon.appendPolygon(polygon);
+      } catch {}
+    });
+
+    multiPolygon.transform(inProj, outProj);
+
+    return multiPolygon;
+  }
+
+  const addExtentFromGeoBox = (geoBox, selected) => {
+    const multiPolygon = buildExtentFromGeoBox(geoBox);
+    if (multiPolygon) {
+      const source = extentsLayer.current.getSource();
+      // Add the polygon to the layer and style it
+      const feature = new Feature(multiPolygon);
+      feature.set("isSelected", selected);
+      source.addFeature(feature);
+      if (selected) {
+        feature.setStyle(selectedExtentStyle);
+      } else {
+        feature.setStyle(extentStyle);
+      };
+    }
+  }
+
   useEffect(() => {
     if (catalog?.config_url) {
       blockPanel(true);
@@ -141,16 +283,102 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   }, []);
 
   useEffect(() => {
+    if (!mainMap) return;
+
+    // TThe extents layer has already been created
+    if (extentsLayer?.current) return;
+
+    const layerId = 'catalog-snig';
+
+    const layer = utils.findOlLayer(mainMap, 'catalog-snig');
+    
+    if (layer) {
+      extentsLayer.current = layer;
+    } else {
+      extentsLayer.current = new VectorLayer({
+        id: layerId,
+        renderMode: 'vector',
+        source: new Vector({}),
+        style: extentStyle,
+        selectable: false
+      });
+
+      const parentLayer = utils.findOlLayer(mainMap, 'overlays');
+
+      if (parentLayer) {      
+        parentLayer.getLayers().getArray().push(extentsLayer.current);
+      } else {
+        mainMap.addLayer(extentsLayer.current);
+      }
+    }
+
+  }, [mainMap]);
+
+  useEffect(() => {
     if (!loaded) return;
     searchCatalog();
   }, [searchParams, searchCallback]);
-
 
   useEffect(() => {
     if (!loaded) return;
     searchCatalog();
   }, [selectedFacetValues]);
 
+  useEffect(() => {
+    const layer = extentsLayer?.current;
+
+    if (!layer) return;
+
+    if (selected_menu != componentId || catalog.show_extents === false) return;
+
+    const source = layer.getSource();
+    source.clear();
+    
+    let records = [];
+    if (Array.isArray(data?.metadata)) {
+      records = [...data.metadata];
+    } else if (data?.metadata) {
+      records = [data.metadata];
+    }
+
+    records.forEach(m => {
+      addExtentFromGeoBox(m.geoBox, false);
+    });
+
+    //Refresh map - force render o layer
+    mainMap.render();
+    
+    return () => {
+      // unmount
+      if (layer) {
+        layer.getSource().clear();
+        //Refresh map - force render o layer
+        mainMap.render();
+      }
+    }
+
+  }, [data?.metadata, selected_menu]);
+
+  useEffect(() => {
+    const layer = extentsLayer?.current;
+
+    if (!layer) return;
+
+    if (selected_menu != componentId || catalog.show_record_extent === false) return;
+
+    const lst = extentsLayer.current.getSource().getFeatures().filter(f => f.get("isSelected") === true);
+    if (lst?.length) {
+      lst.forEach(f => extentsLayer.current.getSource().removeFeature(f));
+    }
+
+    if (activeRecord) {
+      addExtentFromGeoBox(activeRecord.geoBox, true);
+    }
+
+    //Refresh map - force render o layer
+    mainMap.render();
+
+  }, [activeRecord, selected_menu]);
 
   function setError(message) {
     toastEl.show({
@@ -291,6 +519,33 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
           const new_values = {...filtersItems};
           new_values[filterId] = e.value || [];
           setFiltersItems(new_values);
+        }}
+        onRecordHover={(item) => {
+          if (!item) {
+            setActiveRecord(null);
+          } else {            
+            const records = Array.isArray(data?.metadata) ? data?.metadata : data?.metadata ? [data?.metadata] : [];
+            try {
+              const rec = records.find(d => d == item);
+              setActiveRecord(rec);
+            } catch (ex) {
+              setActiveRecord(null);
+            }
+          }
+        }}
+        onRecordClick={(item) => {
+          const records = Array.isArray(data?.metadata) ? data?.metadata : data?.metadata ? [data?.metadata] : [];
+          const rec = records.find(d => d == item);
+          if (rec) {
+            try {
+              const geom = buildExtentFromGeoBox(rec.geoBox);
+              if (geom) {
+                setActiveRecord(rec);
+                const extent = geom.getExtent();
+                dispatch(actions.map_set_extent([extent[2] - extent[0], extent[3] - extent[1]], extent));
+              }
+            } catch (ex) {}
+          }
         }}
       />
     </React.Fragment>
