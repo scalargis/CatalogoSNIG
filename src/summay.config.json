@@ -11,6 +11,13 @@
       }
     },
     { 
+      "key": "hvd",
+      "title": "CONJUNTO DE DADOS DE ELEVADO VALOR",
+      "strings": {
+        "HVD": "Sim"
+      }
+    },
+    { 
       "key": "openServiceType",
       "label": "Serviços",
       "strings": {
