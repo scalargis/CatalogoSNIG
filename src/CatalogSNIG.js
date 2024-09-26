@@ -536,13 +536,15 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
         onRecordClick={(item) => {
           const records = Array.isArray(data?.metadata) ? data?.metadata : data?.metadata ? [data?.metadata] : [];
           const rec = records.find(d => d == item);
-          if (rec) {
+          if (rec?.geoBox) {
             try {
               const geom = buildExtentFromGeoBox(rec.geoBox);
               if (geom) {
                 setActiveRecord(rec);
                 const extent = geom.getExtent();
-                dispatch(actions.map_set_extent([extent[2] - extent[0], extent[3] - extent[1]], extent));
+                if (extent && extent?.length && extent.every(val => isFinite(val))) {
+                  dispatch(actions.map_set_extent([extent[2] - extent[0], extent[3] - extent[1]], extent));
+                }
               }
             } catch (ex) {}
           }
