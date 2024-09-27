@@ -34,7 +34,27 @@ const ListFilter = ({ id, config, items, onChange }) => {
     if (config?.options?.source?.type === "codelist" && !config?.options?.source?.path) return
 
 
-    const url = getServiceUrl(config?.url);    
+    const url = getServiceUrl(config?.url);
+
+    if (config?.options?.source?.type === "list") {
+      let _list = [];
+
+      if (config?.options?.source?.data) {
+        if (Array.isArray(config.options.source.data)) {
+          _list = config.options.source.data;
+        } else {
+          Object.entries(config?.options?.source?.data).forEach(elem => {
+            _list.push({code: elem[0], name: elem[1]});
+          });
+        }
+      }
+
+      if (config?.sortField) _list = getOrderedItems(_list, config);
+
+      setList(_list);
+
+      return;
+    }
 
     if (config?.options?.source?.type === "codelist") {
       dataProvider(url).getCodeList(config.options.source.path)

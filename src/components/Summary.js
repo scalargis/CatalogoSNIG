@@ -44,9 +44,15 @@ export default function Summary({ core, utils, config, title, data, showAll=fals
       config?.strings[group?.["@name"]] || config?.strings[group?.["@label"]] : 
       title;
 
+    let items = Array.isArray(group?.category) ? group.category : (group?.category ? [group.category] : []); 
+
+    if (facetConfig?.filter?.length) {
+      items = items.filter(t => facetConfig.filter.includes(t["@value"]));
+    }
+
     return <MorphFacet key={index} {...childProps}
       facetId={group?.["@name"]} config={facetConfig}
-      items={Array.isArray(group?.category) ? group.category : (group?.category ? [group.category] : [])} 
+      items={items} 
       title={title}
       maxRows={group?.maxRows || maxRows}
       strings={_config?.strings}

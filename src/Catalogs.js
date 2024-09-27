@@ -25,6 +25,18 @@ export default function Catalogs ({core, viewer, mainMap, config, actions, recor
       }).then(result => {
         if (Array.isArray(result)) {
           setCatalogs(result.map((cat, index) => {return { label: cat.title, value: index, data: cat }}));
+
+          if (result?.length > 0 && record?.selectedCatalog != null ) {
+            let selectedIndex;
+            if (Number.isInteger(record?.selectedCatalog)) {
+              selectedIndex = record.selectedCatalog;
+            } else {
+              selectedIndex = result.findIndex(v => v.id === record.selectedCatalog);
+            }
+            if (selectedIndex >= 0 && selectedIndex < result?.length) {
+              setSelected(selectedIndex);
+            }
+          }
         }
       }).catch(error => {        
           console.log('error', error);
