@@ -1,0 +1,64 @@
+{
+  "id": "catalogosnig",
+  "type": "CatalogSNIG",
+  "title": "Catálogo SNIG",
+  "icon": "pi pi-briefcase",
+  "target": "mainmenu",
+  "config_json": {
+    "classname": "metadata-catalog",
+    "url": "https://snig.dgterritorio.gov.pt/rndg",
+    "show_extents": true,
+    "show_record_extent": true,
+    "extents_style": {
+      "style_color": "55, 255, 255, 0",
+      "style_stroke_color": "0, 255, 0, 0.5",
+      "style_stroke_width": 4
+    },
+    "record_extent_style": {
+      "style_color": "55, 255, 255, 0",
+      "style_stroke_color": "255, 0, 0, 1",
+      "style_stroke_width": 5
+    },
+    "filters": [
+      {
+        "id": "what",
+        "type": "AnySNIG",
+        "label": "O quê?",
+        "query": "anysnig",
+        "options": {
+          "multi": true
+        }
+      },
+      {
+        "id": "where",
+        "type": "RegionsSNIG",
+        "query": "geometry",
+        "label": "Onde?"
+      }
+    ],
+    "allow_add_map": true,
+    "allow_service_types": [
+      "WMS",
+      "WMTS",
+      "WFS"
+    ],
+    "summary": {
+      "maxDimensions": 5,
+      "maxRows": 5,
+      "dimensions": [
+        { 
+          "key": "openServiceType",
+          "label": "Serviços",
+          "maxRows": 2,
+          "strings": {
+            "viewAndDowload": "Visualização e descarregamento",
+            "view": "Visualização",
+            "download": "Descarregamento",
+            "openServiceType_undefined": "Sem serviços"
+          }
+        }
+      ]
+    }
+  },
+  "children": []
+}
