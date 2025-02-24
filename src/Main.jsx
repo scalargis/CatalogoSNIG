@@ -23,7 +23,7 @@ export function MainMenu({ className, config, actions, record }) {
             title={title}
             className={className ? className + ' catalog-snig-main-menu-btn' : null}
             icon="pi"
-            style={{ margin: '0.5em 1em', backgroundImage: `url("${record.config_json.btn_image}")` }}
+            style={{ backgroundImage: `url("${record.config_json.btn_image}")` }}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
           />
         )
@@ -34,7 +34,6 @@ export function MainMenu({ className, config, actions, record }) {
             title={title}
             className={className}
             icon="pi pi-book"
-            style={{ margin: '0.5em 1em' }}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
           />         
       )
