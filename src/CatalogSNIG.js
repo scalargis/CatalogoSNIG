@@ -153,6 +153,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       return params;
     });
 
+  const [triggerEffect, setTriggerEffect] = useState(null);
+
   const [searchCallback, setSearchCallback] = useState(null);
  
   const [data, setData] = useState(null);
@@ -326,7 +328,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
     const params = new URLSearchParams(external_search_params);
 
-    console.log("params", params);
+    //console.log("params", params);
 
     setSearchParams({
       ...searchParams,
@@ -363,13 +365,17 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   useEffect(() => {
     if (!loaded) return;
-    searchCatalog();
-  }, [searchParams, searchCallback]);
 
-  useEffect(() => {
-    if (!loaded) return;
-    searchCatalog();
-  }, [selectedFacetValues]);
+    const _trigger = triggerEffect;
+    setTriggerEffect(null);
+
+    if (_trigger == "clearAll") {
+      setData(null);
+      setPanel(null);
+    } else {
+      searchCatalog();
+    }
+  }, [searchParams, selectedFacetValues, searchCallback]);
 
   useEffect(() => {
     const layer = extentsLayer?.current;
@@ -475,6 +481,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       from: 1
     });
     setSearchCallback(() => options?.callback);
+
+    setTriggerEffect("clearAll");
   }
 
   const onSort = (field, order) => {
@@ -534,25 +542,6 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       />
     )
   
-  if (catalog_cfg.externalSearchParams) {
-    console.log(
-          {
-            data:{
-            ...data,
-            rows: searchParams.rows,
-            sortBy: searchParams.sortBy,
-            sortOrder: searchParams.sortOrder,
-            collapsedFacets: [...collapsedFacets],
-            selectedFacets: [...selectedFacetValues]
-          },
-          filters: filters,
-          filtersItems: filtersItems,
-          searchParams: searchParams
-        } 
-    );
-  }
-
-
   if (panel==='list') {
     return <React.Fragment>
       {showOnPortal(<Toast ref={(el) => toastEl = el} />)}
