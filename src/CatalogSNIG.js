@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation } from "react-router-dom";
 
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
@@ -17,7 +18,6 @@ import Filters from './components/Filters';
 import MetadataList from './MetadataList';
 import dataProvider from './utils/dataProvider';
 import { getServiceUrl } from './utils';
-import { create } from 'domain';
 
 
 const defaultFilters = [
@@ -119,6 +119,9 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   const { dispatch, Models } = config;
   const { createStyle} = Models.MapModel;
   const { showOnPortal, getWindowSize } = utils;
+
+  // url params
+  const external_search_params = useLocation().search;
 
   const [loaded, setLoaded] = useState(false);
 
@@ -316,6 +319,50 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   useEffect(() => {
     if (!loaded) return;
+
+    if (catalog_cfg.externalSearchParams !== true) return;
+
+    if (!external_search_params) return;
+
+    const params = new URLSearchParams(external_search_params);
+
+    console.log("params", params);
+
+    setSearchParams({
+      ...searchParams,
+      from: params.get('from') ? parseInt(params.get('from')) : searchParams.from,
+      rows: params.get('from') && params.get('to') ? (parseInt(params.get('to')) - parseInt(params.get('from')) + 1) : searchParams.rows,
+      sortBy: params.get('sortBy') || defaultSearchParams.sortBy,
+      sortOrder: params.get('sortOrder') || defaultSearchParams.sortOrder
+    });
+
+    if (params.get("facet.q")) {
+      const _facets = params.get("facet.q").split('&').map(f => {
+        const [facet, value] = f.split('/');
+        return {facet, value: decodeURIComponent(value)};
+      });
+      if (_facets?.length) { 
+        setSelectedFacetValues(_facets);
+      }
+    }
+
+    const _filtersItems = {};
+    for (const [key, value] of params.entries()) {
+      const flt = filters.find(f => {
+        return f.query === key.toLowerCase()
+      });
+
+      if (flt) {
+        let _val = value.replace("region:", "");
+        _filtersItems[flt.id] = [{code: _val, name: _val}];
+      }
+    }
+    setFiltersItems(_filtersItems);
+
+  }, [loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
     searchCatalog();
   }, [searchParams, searchCallback]);
 
@@ -486,6 +533,25 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
         text="Não foi possível carregar o catálogo."
       />
     )
+  
+  if (catalog_cfg.externalSearchParams) {
+    console.log(
+          {
+            data:{
+            ...data,
+            rows: searchParams.rows,
+            sortBy: searchParams.sortBy,
+            sortOrder: searchParams.sortOrder,
+            collapsedFacets: [...collapsedFacets],
+            selectedFacets: [...selectedFacetValues]
+          },
+          filters: filters,
+          filtersItems: filtersItems,
+          searchParams: searchParams
+        } 
+    );
+  }
+
 
   if (panel==='list') {
     return <React.Fragment>
