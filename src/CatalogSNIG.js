@@ -110,6 +110,15 @@ const buildStyle = (styleFn, style, defaultStyle) => {
   return styleFn(new_style);
 }
 
+const getUrlParamValue = (params, paramName) => {
+    const keyName = Array.from(params.keys()).find(
+        function(key){
+            return key.toLowerCase() == paramName.toLowerCase();
+        }
+    );
+    return params.get(keyName);
+}
+
 let toastEl = null;
 
 
@@ -340,9 +349,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       sortOrder: params.get('sortOrder') || defaultSearchParams.sortOrder
     });
 
-    if (params.get('metadataUUID')) {
-      setOtherParams({uuid: params.get('metadataUUID')});
-    }
+    const metadataUUID = getUrlParamValue(params, 'metadataUUID');
+    if (metadataUUID) setOtherParams({uuid: metadataUUID});
 
     if (params.get("facet.q")) {
       const _facets = params.get("facet.q").split('&').map(f => {
@@ -368,12 +376,12 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
     setFiltersItems(_filtersItems);
 
-    if (params.get('serviceUrl')) {
-      const serviceUrl = params.get('serviceUrl');
-      const serviceType = params.get('serviceType') || 'WMS';
+    const mapServiceUrl = getUrlParamValue(params, 'serviceUrl');
+    if (mapServiceUrl) {
+      const serviceType = getUrlParamValue(params, 'serviceType') || 'WMS';
       const serviceData = {
         type: serviceType.toUpperCase(),
-        url: serviceUrl
+        url: mapServiceUrl
       };
       core.pubsub.publish("ThemeWizard/AddService", {...serviceData, callback: null});
     }
