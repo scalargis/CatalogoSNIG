@@ -153,6 +153,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       return params;
     });
 
+  const [otherParams, setOtherParams] = useState({});
+
   const [triggerEffect, setTriggerEffect] = useState(null);
 
   const [searchCallback, setSearchCallback] = useState(null);
@@ -338,6 +340,10 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       sortOrder: params.get('sortOrder') || defaultSearchParams.sortOrder
     });
 
+    if (params.get('metadataUUID')) {
+      setOtherParams({uuid: params.get('metadataUUID')});
+    }
+
     if (params.get("facet.q")) {
       const _facets = params.get("facet.q").split('&').map(f => {
         const [facet, value] = f.split('/');
@@ -359,7 +365,18 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
         _filtersItems[flt.id] = [{code: _val, name: _val}];
       }
     }
+
     setFiltersItems(_filtersItems);
+
+    if (params.get('serviceUrl')) {
+      const serviceUrl = params.get('serviceUrl');
+      const serviceType = params.get('serviceType') || 'WMS';
+      const serviceData = {
+        type: serviceType.toUpperCase(),
+        url: serviceUrl
+      };
+      core.pubsub.publish("ThemeWizard/AddService", {...serviceData, callback: null});
+    }
 
   }, [loaded]);
 
@@ -474,13 +491,15 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   const onClearSearch = (options) => {
     setFiltersItems({});
     setCollapsedFacets([]);
-    setSelectedFacetValues([]);    
+    setSelectedFacetValues([]);
 
     setSearchParams({
       ...searchParams,
       from: 1
     });
     setSearchCallback(() => options?.callback);
+
+    setOtherParams({});
 
     setTriggerEffect("clearAll");
   }
@@ -494,9 +513,9 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     setSearchCallback(null);
   }
 
-  const searchCatalog = (options) => {  
+  const searchCatalog = (options) => {
     // Filters
-    const params = Filters.getQueryParameters(filters, filtersItems) || {};
+    let params = Filters.getQueryParameters(filters, filtersItems) || {};
     // Facets
     if (selectedFacetValues?.length) {
       const facetq = selectedFacetValues.map(item => `${item.facet}/${encodeURIComponent(item.value)}`).join('&');
@@ -509,6 +528,11 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     // Sort
     params.sortBy = searchParams?.sortBy || '';
     params.sortOrder = searchParams?.sortOrder || '';
+    // Other Params (metadataUUID)
+    params = {
+      ...params,
+      ...otherParams
+    }
 
     blockPanel(true);
 
