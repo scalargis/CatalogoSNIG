@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
+import classnames from 'classnames';
 
 import { getViewLinks } from '../utils';
 
@@ -22,7 +23,7 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
       template: (item, options) => {
         return (
             /* custom element */
-            <a className={options.className} target={item.target} onClick={options.onClick} title={l.url}>
+            <a className={classnames(options.className, 'p-2')} target={item.target} onClick={options.onClick} title={l.url}>
               <span className={options.labelClassName}>{item.label}</span>
             </a>
         );
