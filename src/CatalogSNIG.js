@@ -333,7 +333,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   useEffect(() => {
     if (!loaded) return;
 
-    if (catalog_cfg.externalSearchParams !== true) return;
+    if (catalog_cfg.external_search_params !== true) return;
 
     if (!external_search_params) return;
 
