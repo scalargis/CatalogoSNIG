@@ -33,7 +33,7 @@ export function MainMenu({ className, config, actions, record }) {
           <Button
             title={title}
             className={className}
-            icon="pi pi-book"
+            icon={record?.config_json?.btn_icon ? record.config_json.btn_icon : "pi pi-book"}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
           />         
       )
