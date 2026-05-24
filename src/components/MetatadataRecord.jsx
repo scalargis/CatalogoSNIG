@@ -60,16 +60,16 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   const footer = (
     <div className="grid">
       <div className="col-8 text-left">
-        <Button className="mr-1 p-button-sm" 
+        <Button className="mr-1" size="small"
           tooltip="Ver Ficha de Metadados">
             <a href={metadata_url} target="_blank" rel="noopener noreferrer">Metadados</a>
         </Button>
-        <ViewServicesButton core={core} utils={utils} data={data} className="p-button-sm" />
-        <DownloadServicesButton core={core} utils={utils} data={data} className="p-button-sm" />
+        <ViewServicesButton core={core} utils={utils} data={data} size="small" className="" />
+        <DownloadServicesButton core={core} utils={utils} data={data} size="small" className="" />
       </div>
       <div className="col-4 text-right">
         { !(componentConfig?.allow_add_map === false) &&
-        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} className="p-button-sm" />
+        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="small" className="" />
         }
       </div>
     </div>

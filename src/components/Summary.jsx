@@ -87,11 +87,11 @@ export default function Summary({ core, utils, config, title, data, showAll=fals
         <div className="grid mt-1">        
           <div className="col-12 text-center">
             <ButtonGroup>
-              <Button label="Expandir" icon="pi pi-plus-circle" className="p-button-outlined p-button-sm"
+              <Button label="Expandir" icon="pi pi-plus-circle" outlined size="small"
                 onClick={() => {
-                  setCollapsedFacets([]);                
+                  setCollapsedFacets([]);
                 }} />
-              <Button label="Recolher" icon="pi pi-minus-circle" className="p-button-outlined p-button-sm"
+              <Button label="Recolher" icon="pi pi-minus-circle" outlined size="small"
                 onClick={() => {
                   setCollapsedFacets(dimensions.map(d=> d["@name"]));
                 }}

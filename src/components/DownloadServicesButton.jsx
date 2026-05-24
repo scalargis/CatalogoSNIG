@@ -5,7 +5,7 @@ import { Dialog } from 'primereact/dialog';
 import { copyToClipboard, getDownloadLinks } from '../utils';
 
 
-export default function DownloadServicesButton({ core, utils, data, className }) {
+export default function DownloadServicesButton({ core, utils, data, className, size }) {
   const { getWindowSize, showOnPortal } = utils;
 
   const [showForm, setShowForm] = useState(false);
@@ -30,7 +30,7 @@ export default function DownloadServicesButton({ core, utils, data, className })
 
   return (
     <React.Fragment>
-      <Button icon="pi pi-download" className={`p-button-outlined p-button-info ${className} mr-1`}
+      <Button icon="pi pi-download" outlined severity="info" size={size} className={`${className || ''} mr-1`}
         tooltip="Ver Url de serviço de descarregamento (Ficheiro, WFS, WCS, ATOM)"
         onClick={e => openForm()}
       />      
@@ -51,9 +51,9 @@ export default function DownloadServicesButton({ core, utils, data, className })
                 </div>
                 <div className="col-12 md:col-1">
                   <Button
-                    style={{marginLeft:"0px", color: "#2196F"}} 
+                    style={{marginLeft:"0px", color: "#2196F"}}
                     icon="pi pi-copy"
-                    className="p-button-sm p-button-rounded p-button-outlined p-button-help p-button-icon-only"
+                    size="small" rounded outlined severity="help"
                     onClick={(e) => { e.preventDefault(); e.currentTarget.blur(); copyToClipboard(l.url) }}
                     tooltip="Copiar Url" tooltipOptions={{position: 'top'}}
                   />

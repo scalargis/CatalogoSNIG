@@ -44,7 +44,7 @@ const SearchFacet = ({ core, utils, facetId, config, title, items, strings, sele
                     setFilter(e.target.value);
                   }}
                 />
-                <Button icon="pi pi-times" className="p-button-info"
+                <Button icon="pi pi-times" severity="info"
                   tooltip='Limpar filtro'
                   onClick={(e)=>{
                     setFilter('');

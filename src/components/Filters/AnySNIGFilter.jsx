@@ -9,7 +9,7 @@ const AnySNIGFilter = ({ id, config, items, onChange }) => {
 
   const [filteredAnySNIG, setFilteredAnySNIG] = useState(null);
     
-  const inputText = useRef();
+  const inputText = useRef(null);
   const isSelected = useRef(false);
 
   const _id = id || config?.id;

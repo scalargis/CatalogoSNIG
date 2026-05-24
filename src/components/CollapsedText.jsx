@@ -11,7 +11,7 @@ function CollapsedText(props) {
     const label = collapsed ? "... mais" : "... menos";
     return <>
       <span>{collapsed ? text.substring(0, maxLength || 300) : text}</span>
-      <Button label={label} className="p-button-link" onClick={(e) => {
+      <Button label={label} link onClick={(e) => {
         e.preventDefault();
         setCollapsed(!collapsed);
       }} />

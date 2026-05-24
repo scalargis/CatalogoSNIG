@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
@@ -191,7 +191,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   const [extentStyle] = useState(buildStyle(createStyle, catalog?.extents_style, defaultExtentStyle));
   const [selectedExtentStyle] = useState(buildStyle(createStyle, catalog?.record_extent_style, defaultSelectedExtentStyle));
 
-  const extentsLayer = useRef();
+  const extentsLayer = useRef(null);
 
 
   const wsize = getWindowSize();

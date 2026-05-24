@@ -85,25 +85,25 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
     },
     'FirstPageLink': (options) => {
       return (
-        <Button className="p-button-rounded p-button-text" icon="pi pi-angle-double-left"
+        <Button rounded text icon="pi pi-angle-double-left"
           onClick={options.onClick} disabled={options.disabled} />
       )
     },    
     'PrevPageLink': (options) => {
       return (
-        <Button className="p-button-rounded p-button-text" icon="pi pi-angle-left"
+        <Button rounded text icon="pi pi-angle-left"
           onClick={options.onClick} disabled={options.disabled} />
       )
     },    
     'NextPageLink': (options) => {
       return (
-        <Button className="p-button-rounded p-button-text" icon="pi pi-angle-right"
+        <Button rounded text icon="pi pi-angle-right"
           onClick={options.onClick} disabled={options.disabled} />
       )
     },    
     'LastPageLink': (options) => {
       return (
-        <Button className="p-button-rounded p-button-text" icon="pi pi-angle-double-right"
+        <Button rounded text icon="pi pi-angle-double-right"
           onClick={options.onClick} disabled={options.disabled} />
       )
     },

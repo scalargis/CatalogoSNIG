@@ -62,7 +62,7 @@ const DefaultFacet = ({ core, utils, facetId, config, title, items, selectedFace
           {_items.slice(0, _maxRows).map((item, index) => facetItemTemplate({item, index}))}
           {((_items.length > _maxRows) &&  !showExtraRows) && 
           <li>
-            <Button label="Ver todos" className="p-button-link"
+            <Button label="Ver todos" link
               onClick={(e) => setShowsExtraRows(true)
               }/>
           </li>}
@@ -70,7 +70,7 @@ const DefaultFacet = ({ core, utils, facetId, config, title, items, selectedFace
           <React.Fragment>
             {_items.slice(_maxRows).map((item, index) => facetItemTemplate({item, index}))}
             <li>
-              <Button label="Ver menos" className="p-button-link"
+              <Button label="Ver menos" link
                 onClick={(e) => setShowsExtraRows(false)
                 }/>
             </li>            
