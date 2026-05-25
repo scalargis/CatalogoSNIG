@@ -131,8 +131,6 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   // url params
   const external_search_params = useLocation().search;
-  
-  console.log(external_search_params);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -341,7 +339,9 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
     const params = new URLSearchParams(external_search_params);
 
-    //console.log("params", params);
+    if (!(params.has("serviceUrl")) && !params.has("from") && !params.has("rows") && !params.has("metadataUUID") && !params.has("anysnig") && !params.has("geometry") && !params.has("facet.q")) {
+      return;
+    }
 
     setSearchParams({
       ...searchParams,
