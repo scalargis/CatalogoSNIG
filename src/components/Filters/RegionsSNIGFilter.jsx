@@ -9,7 +9,7 @@ const RegionsFilter = ({id, config, items, onChange}) => {
 
   const [filteredRegions, setFilteredRegions] = useState(null);
 
-  const inputText = useRef();
+  const inputText = useRef(null);
 
   const _id = id || config?.id;
 

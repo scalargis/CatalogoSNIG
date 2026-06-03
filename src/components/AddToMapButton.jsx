@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { getViewLinks } from '../utils';
 
 
-export default function AddToMapButton({ core, utils, componentConfig, data, className }) {
+export default function AddToMapButton({ core, utils, componentConfig, data, className, size }) {
 
   const menu = useRef(null);
 
@@ -43,7 +43,7 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
   return (
     <div>
       <Menu model={links} popup ref={menu} id="popup_menu" />
-      <Button className={`p-button-outlined ${className}`} label="Mapa" icon="pi pi-plus" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup />
+      <Button outlined size={size} className={className} label="Mapa" icon="pi pi-plus" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup />
     </div>
   )
 }

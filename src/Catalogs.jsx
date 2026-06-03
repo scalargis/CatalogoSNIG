@@ -68,7 +68,9 @@ export default function Catalogs ({core, viewer, mainMap, config, actions, recor
               options={catalogs} itemTemplate={(option)=><div>{option.label}</div>}
               onChange={(e) => setSelected(e.value)} />
             <Help
-                className="p-button-rounded p-button-text ml-1 mt-1 btn-help"
+                className="ml-1 mt-1 btn-help"
+                rounded
+                text
                 utils={utils}
                 catalog={catalog}
                 showButton={true}

@@ -9,7 +9,7 @@ const AnyFilter = ({ id, config, items, onChange }) => {
 
   const [filteredAny, setFilteredAny] = useState(null);
     
-  const inputText = useRef();
+  const inputText = useRef(null);
   const isSelected = useRef(false);
 
   const _id = id || config?.id;

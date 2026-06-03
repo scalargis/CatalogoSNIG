@@ -12,7 +12,7 @@ export function Help(props)  {
   const [size, setSize] = useState(null);
   const [maximized, setMaximized] = useState(false);
 
-  const dialog = useRef();
+  const dialog = useRef(null);
 
   const config = catalog?.help ? catalog.help : {};
 
