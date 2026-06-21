@@ -35,6 +35,12 @@
         "type": "RegionsSNIG",
         "query": "geometry",
         "label": "Onde?"
+      },
+      {
+        "id": "mapextent",
+        "type": "MapExtent",
+        "query": "relation",
+        "label": "Extensão do mapa"
       }
     ],
     "allow_add_map": true,

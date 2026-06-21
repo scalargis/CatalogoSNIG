@@ -31,7 +31,11 @@ Filters.getQueryParameters = (filters, filtersItems) => {
             }
           });          
         } else {
-          params[f.query] = [...vals];
+          if (Array.isArray(vals)) {
+            params[f.query] = [...vals];
+          } else {
+            params[f.query] = vals;
+          }
         }
       }
     }

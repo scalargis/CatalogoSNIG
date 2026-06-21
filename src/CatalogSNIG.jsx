@@ -126,7 +126,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   const { selected_menu } = viewer.config_json
   const { dispatch, Models } = config;
-  const { createStyle} = Models.MapModel;
+  const { createStyle, transformExtent } = Models.MapModel;
   const { showOnPortal, getWindowSize } = utils;
 
   // url params
@@ -523,9 +523,20 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     setSearchCallback(null);
   }
 
-  const searchCatalog = (options) => {  
+  const searchCatalog = (options) => {
+    
+    // Extensão atual no sistema de projeção da View (normalmente EPSG:3857)
+    let extent = mainMap.getView().calculateExtent(mainMap.getSize());
+
+    extent = transformExtent(mainMap.getView().getProjection().getCode(), 'EPSG:4326', extent, null);
+    
+    const [minx, miny, maxx, maxy] = extent;
+
+    const extent_wkt = `POLYGON((${minx} ${miny},${maxx} ${miny},${maxx} ${maxy},${minx} ${maxy},${minx} ${miny}))`;
+
     // Filters
     let params = Filters.getQueryParameters(filters, filtersItems) || {};
+
     // Facets
     if (selectedFacetValues?.length) {
       const facetq = selectedFacetValues.map(item => `${item.facet}/${encodeURIComponent(item.value)}`).join('&');
@@ -538,6 +549,10 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     // Sort
     params.sortBy = searchParams?.sortBy || '';
     params.sortOrder = searchParams?.sortOrder || '';
+    //MapExtent Filter
+    if (params?.relation) {
+      params.geometry = extent_wkt;
+    }
     // Other Params (metadataUUID)
     params = {
       ...params,
