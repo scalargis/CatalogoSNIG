@@ -178,6 +178,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   );
   const [filtersItems, setFiltersItems] = useState({});
 
+  const [mapExtentFilter, setMapExtentFilter] = useState(null);
+
   const [collapsedFacets, setCollapsedFacets] = useState([]);
   const [selectedFacetValues, setSelectedFacetValues] = useState([]);
   
@@ -247,6 +249,16 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
         feature.setStyle(extentStyle);
       };
     }
+  }
+
+  const saveMapExtent = () => {
+      // Extensão atual no sistema de projeção da View (normalmente EPSG:3857)
+      let extent = mainMap.getView().calculateExtent(mainMap.getSize());
+      extent = transformExtent(mainMap.getView().getProjection().getCode(), 'EPSG:4326', extent, null);
+
+      const [minx, miny, maxx, maxy] = extent;
+      const extent_wkt = `POLYGON((${minx} ${miny},${maxx} ${miny},${maxx} ${maxy},${minx} ${maxy},${minx} ${miny}))`;
+      setMapExtentFilter(extent_wkt);
   }
 
   useEffect(() => {
@@ -490,6 +502,9 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   }
 
   const onSearch = (options) => {
+    if (options?.saveMapExtent === true) {
+      saveMapExtent();
+    }
     setSearchParams({
       ...searchParams,
       from: options.from,
@@ -500,6 +515,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   const onClearSearch = (options) => {
     setFiltersItems({});
+    setMapExtentFilter(null);
     setCollapsedFacets([]);
     setSelectedFacetValues([]);    
 
@@ -524,15 +540,6 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   }
 
   const searchCatalog = (options) => {
-    
-    // Extensão atual no sistema de projeção da View (normalmente EPSG:3857)
-    let extent = mainMap.getView().calculateExtent(mainMap.getSize());
-
-    extent = transformExtent(mainMap.getView().getProjection().getCode(), 'EPSG:4326', extent, null);
-    
-    const [minx, miny, maxx, maxy] = extent;
-
-    const extent_wkt = `POLYGON((${minx} ${miny},${maxx} ${miny},${maxx} ${maxy},${minx} ${maxy},${minx} ${miny}))`;
 
     // Filters
     let params = Filters.getQueryParameters(filters, filtersItems) || {};
@@ -550,8 +557,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     params.sortBy = searchParams?.sortBy || '';
     params.sortOrder = searchParams?.sortOrder || '';
     //MapExtent Filter
-    if (params?.relation) {
-      params.geometry = extent_wkt;
+    if (params?.relation && mapExtentFilter) {
+      params.geometry = mapExtentFilter;
     }
     // Other Params (metadataUUID)
     params = {
@@ -611,7 +618,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
           selectedFacets: [...selectedFacetValues]
         }}
         filters={filters} 
-        filtersItems={filtersItems}        
+        filtersItems={filtersItems}
+        saveMapExtent={saveMapExtent}
         setError={setError}
         setCollapsedFacets={setCollapsedFacets}
         onSearch={onSearch}
@@ -676,6 +684,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
           <Button label="Pesquisar" type="button" 
             onClick={(e) => {
               e.preventDefault();
+              saveMapExtent();
               setSearchParams({
                 ...searchParams,
                 from: 1

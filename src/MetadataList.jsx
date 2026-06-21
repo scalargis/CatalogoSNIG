@@ -158,7 +158,7 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
             <div className="field col-6 text-center">
               <Button label="Pesquisar" 
                 onClick={(e) => {
-                  onSearch({from: 1, rows: rows, callback:()=> {setActiveIndex(1);}});
+                  onSearch({from: 1, rows: rows, saveMapExtent: true, callback:()=> {setActiveIndex(1);}});
                 }}/>
             </div>
           </div>
