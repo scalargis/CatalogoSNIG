@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
+import { ActionIcon, TextInput } from '@mantine/core';
+import { IconX } from '@scalargis/ui';
 
 
-const SearchFacet = ({ core, utils, facetId, config, title, items, strings, selectedFacets, 
+const SearchFacet = ({ core, utils, facetId, config, title, items, strings, selectedFacets,
   onClickFacet, onClickFacetItem, collapsed=false }) => {
 
   const [filter, setFilter] = useState('');
@@ -37,22 +37,22 @@ const SearchFacet = ({ core, utils, facetId, config, title, items, strings, sele
         <ul className="facet-content">
           <div className="flex grid">
             <div className="col-12">
-              <div className="p-inputgroup">
-                <InputText placeholder="Filtro" value={filter}
-                  className="facet-search-inputtext"
-                  onChange={(e) => { 
-                    setFilter(e.target.value);
-                  }}
-                />
-                <Button icon="pi pi-times" severity="info"
-                  tooltip='Limpar filtro'
-                  onClick={(e)=>{
-                    setFilter('');
-                    if (selectedFacets?.length > 0) {
-                      onClickFacetItem(facetId, selectedFacets[0]);
-                    }                    
-                  }}/>
-              </div>
+              <TextInput
+                placeholder="Filtro"
+                value={filter}
+                className="facet-search-inputtext"
+                onChange={(e) => setFilter(e.target.value)}
+                rightSection={
+                  <ActionIcon variant="subtle" color="informative" aria-label="Limpar filtro"
+                    onClick={(e) => {
+                      setFilter('');
+                      if (selectedFacets?.length > 0) {
+                        onClickFacetItem(facetId, selectedFacets[0]);
+                      }
+                    }}>
+                    <IconX />
+                  </ActionIcon>
+                } />
             </div>
             <ul className="col-12 facet-search-list">
               {_items.filter(item => {

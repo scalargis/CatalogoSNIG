@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-import { Button } from 'primereact/button';
+import { Button } from '@mantine/core';
 
 
 const getOrderedItems = (items, config, strings) => {
@@ -60,20 +60,20 @@ const DefaultFacet = ({ core, utils, facetId, config, title, items, selectedFace
       { !collapsed && <div>
         <ul className="facet-content">
           {_items.slice(0, _maxRows).map((item, index) => facetItemTemplate({item, index}))}
-          {((_items.length > _maxRows) &&  !showExtraRows) && 
+          {((_items.length > _maxRows) &&  !showExtraRows) &&
           <li>
-            <Button label="Ver todos" link
+            <Button variant="subtle" size="compact-sm"
               onClick={(e) => setShowsExtraRows(true)
-              }/>
+              }>Ver todos</Button>
           </li>}
           {((_items.length > _maxRows) &&  showExtraRows) &&
           <React.Fragment>
             {_items.slice(_maxRows).map((item, index) => facetItemTemplate({item, index}))}
             <li>
-              <Button label="Ver menos" link
+              <Button variant="subtle" size="compact-sm"
                 onClick={(e) => setShowsExtraRows(false)
-                }/>
-            </li>            
+                }>Ver menos</Button>
+            </li>
           </React.Fragment>}
         </ul>
       </div>}
