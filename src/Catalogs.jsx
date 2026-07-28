@@ -1,6 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { Dropdown } from 'primereact/dropdown';
-import { Message } from 'primereact/message';
+import { Alert, Group, Select } from '@mantine/core';
 
 import CatalogSNIG from './CatalogSNIG';
 import { Help } from './components/Help';
@@ -38,45 +37,48 @@ export default function Catalogs ({core, viewer, mainMap, config, actions, recor
             }
           }
         }
-      }).catch(error => {        
+      }).catch(error => {
           console.log('error', error);
       });
     }
   }, []);
-  
+
   const catalog = selected >=0 ? {
       ...catalogs[selected].data,
       show_content_header: record.show_content_header,
       key: `cat${selected}`
     } : null;
 
+  // Mantine Select values are strings; the catalog index is kept as the value.
+  const selectData = catalogs.map((cat) => ({ value: String(cat.value), label: cat.label }));
+
   return (
     <React.Fragment>
 
-      <div className="p-fluid grid">
+      <div className="grid">
         <div className="col-12">
           <h3>Catálogos de Metadados</h3>
-          {selected < 0 && <Message
+          {selected < 0 && <Alert
               className="mt-2 mb-4"
-              severity="info"
-              text="Escolha um dos catálogos de metadados disponíveis"
-            />}
-          <div className="p-inputgroup mt-2">
-            <Dropdown value={selected} 
+              color="informative"
+              variant="light"
+            >Escolha um dos catálogos de metadados disponíveis</Alert>}
+          <Group gap="xs" align="flex-end" wrap="nowrap" className="mt-2">
+            <Select
+              style={{ flex: 1 }}
+              value={selected >= 0 ? String(selected) : null}
               placeholder="Catálogos..."
-              emptyMessage="Não existem catálogos"
-              options={catalogs} itemTemplate={(option)=><div>{option.label}</div>}
-              onChange={(e) => setSelected(e.value)} />
+              nothingFoundMessage="Não existem catálogos"
+              data={selectData}
+              onChange={(value) => setSelected(value == null ? -1 : parseInt(value))} />
             <Help
-                className="ml-1 mt-1 btn-help"
-                rounded
-                text
+                className="btn-help"
                 utils={utils}
                 catalog={catalog}
                 showButton={true}
                 disabled={selected < 0}
               />
-          </div>
+          </Group>
         </div>
       </div>
 
