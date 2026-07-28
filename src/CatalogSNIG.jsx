@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router';
 
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
-import { Message } from 'primereact/message';
+import { Alert, Button } from '@mantine/core';
+import { notify } from '@scalargis/ui';
 
 import VectorLayer from 'ol/layer/Vector'
 import { Vector } from 'ol/source';
@@ -119,15 +118,13 @@ const getUrlParamValue = (params, paramName) => {
     return params.get(keyName);
 }
 
-let toastEl = null;
-
 
 export default function CatalogSNIG({ core, viewer, mainMap, config, actions, catalog, utils, componentId, blockPanel }) {
 
   const { selected_menu } = viewer.config_json
   const { dispatch, Models } = config;
   const { createStyle, transformExtent } = Models.MapModel;
-  const { showOnPortal, getWindowSize } = utils;
+  const { getWindowSize } = utils;
 
   // url params
   const external_search_params = useLocation().search;
@@ -473,11 +470,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   }, [activeRecord, selected_menu]);
 
   function setError(message) {
-    toastEl.show({
-      severity: 'error',
-      summary: 'Ocorreu um erro inesperado',
-      detail: message
-    });
+    notify.error('Ocorreu um erro inesperado', message);
   }
 
   const onClickFacet = (facet)=> {
@@ -591,16 +584,15 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   };
 
   if (catalog_cfg === null) return (
-      <Message
+      <Alert
         className="col-12 mt-4 mb-4"
-        severity="error"
-        text="Não foi possível carregar o catálogo."
-      />
+        color="danger"
+        variant="light"
+      >Não foi possível carregar o catálogo.</Alert>
     )
 
   if (panel==='list') {
     return <React.Fragment>
-      {showOnPortal(<Toast ref={(el) => toastEl = el} />)}
       {catalog_cfg?.show_content_header !== false ? catalog_cfg?.content_header ? <Header config={catalog_cfg} /> : <HeaderSNIG /> : null}
       <MetadataList
         core={core}
@@ -667,9 +659,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   return (
     <React.Fragment>
-      {showOnPortal(<Toast ref={(el) => toastEl = el} />)}
       {catalog_cfg?.show_content_header !== false ? catalog_cfg?.content_header ? <Header config={catalog_cfg} /> : <HeaderSNIG /> : null}
-      <div className="p-fluid grid pt-3">
+      <div className="grid pt-3">
         <Filters url={url} float_labels={catalog_cfg?.float_labels} filters={filters} filtersItems={filtersItems}
           onFilterChange={(filterId, e) => {
             const new_values = {...filtersItems};
@@ -681,7 +672,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
       <div className="grid pt-2">
         <div className="col" />
         <div className="col text-right">
-          <Button label="Pesquisar" type="button" 
+          <Button type="button"
             onClick={(e) => {
               e.preventDefault();
               saveMapExtent();
@@ -690,8 +681,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
                 from: 1
               });
               setSearchCallback(null);
-            }} 
-          />
+            }}
+          >Pesquisar</Button>
         </div>
       </div>
     </React.Fragment>
