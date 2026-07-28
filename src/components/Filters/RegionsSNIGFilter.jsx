@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { AutoComplete } from 'primereact/autocomplete';
+import React, { useState } from 'react';
 
+import TokenAutocomplete from './TokenAutocomplete';
 import dataProvider from '../../utils/dataProvider';
 import { getServiceUrl } from '../../utils';
 
@@ -8,8 +8,6 @@ import { getServiceUrl } from '../../utils';
 const RegionsFilter = ({id, config, items, onChange}) => {
 
   const [filteredRegions, setFilteredRegions] = useState(null);
-
-  const inputText = useRef(null);
 
   const _id = id || config?.id;
 
@@ -23,54 +21,34 @@ const RegionsFilter = ({id, config, items, onChange}) => {
     const url = getServiceUrl(config?.url);
 
     dataProvider(url).searchRegions({filter, rows: 200})
-      .then(result => { 
+      .then(result => {
         let _filteredRegions = [];
         if (result?.length) {
           result.forEach(elem => {
             _filteredRegions.push({name: elem.value, code: elem.uri });
           });
-  
+
           setFilteredRegions([..._filteredRegions]);
         } else {
           setFilteredRegions(null);
-        }      
+        }
       })
       .catch((error)=>console.log(error))
-      .finally(); 
+      .finally();
   }
 
-
-  const child = <AutoComplete id={_id} className="text-filter"         
-    multiple
-    field="name"
-    value={items?.length ? items : (inputText?.current?.value ? [] : null)} 
-    suggestions={filteredRegions}        
-    completeMethod={searchRegion}
-    onChange={onChange}
-    onFocus={(e) => {
-      inputText.current = e.target;
-    }}
-    onBlur={(e) => {
-      if (inputText?.current?.value) inputText.current.value = '';
-    }}           
-    onSelect={(e) => {}}
-  />
-
   return (
-    <React.Fragment>
-    {
-      config?.float_labels === false ?
-      <React.Fragment>
-        <label>{config.label}</label>
-        {child}
-      </React.Fragment> :
-      <span className="p-float-label">
-        {child}
-        <label htmlFor={_id}>{config.label}</label>
-      </span>
-    }
-    </React.Fragment>
-  )   
+    <TokenAutocomplete
+      id={_id}
+      className="text-filter"
+      label={config.label}
+      value={items || []}
+      field="name"
+      suggestions={filteredRegions}
+      onSearch={searchRegion}
+      onChange={onChange}
+    />
+  )
 
 }
 

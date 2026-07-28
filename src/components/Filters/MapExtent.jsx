@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { Checkbox } from "primereact/checkbox";
-import { RadioButton } from "primereact/radiobutton";
+import { Checkbox, Group } from "@mantine/core";
 
 
 const MapExtentFilter = ({ id, config, items, onChange }) => {
 
     const [relation, setRelation] = useState([...(items || [])]);
 
-    const onRelationChange = (e) => {
+    const onRelationChange = (value, checked) => {
         const _relation = [];
 
-        if (e.checked)
-            _relation.push(e.value);
+        if (checked)
+            _relation.push(value);
 
         setRelation(_relation);
 
@@ -21,16 +20,14 @@ const MapExtentFilter = ({ id, config, items, onChange }) => {
     return (
         <React.Fragment>
             <label className="font-semibold">{config?.label || "Extensão do Mapa" }</label>
-            <div className="card flex flex-wrap justify-content-left mt-0 mb-0 pb-0 gap-3">
-                <div className="flex align-items-center">
-                    <Checkbox inputId="ingredient1" name="relation" value="overlaps" onChange={onRelationChange} checked={relation.includes('overlaps')} />
-                    <label htmlFor="ingredient1" className="ml-2">Sobreposição</label>
-                </div>
-                <div className="flex align-items-center">
-                    <Checkbox inputId="ingredient2" name="relation" value="within_bbox" onChange={onRelationChange} checked={relation.includes('within_bbox')} />
-                    <label htmlFor="ingredient2" className="ml-2">Dentro</label>
-                </div>
-            </div>
+            <Group gap="lg" className="mt-0 mb-0 pb-0">
+                <Checkbox label="Sobreposição"
+                    checked={relation.includes('overlaps')}
+                    onChange={(e) => onRelationChange('overlaps', e.currentTarget.checked)} />
+                <Checkbox label="Dentro"
+                    checked={relation.includes('within_bbox')}
+                    onChange={(e) => onRelationChange('within_bbox', e.currentTarget.checked)} />
+            </Group>
         </React.Fragment>
     )
 

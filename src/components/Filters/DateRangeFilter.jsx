@@ -1,75 +1,46 @@
 import React from 'react';
-import { Calendar } from 'primereact/calendar';
-import { locale, addLocale } from 'primereact/api';
+import { DatePickerInput, DatesProvider } from '@mantine/dates';
+import 'dayjs/locale/pt';
 
 import { formatDate } from '../../utils';
 
-const DateRangeFilter = ({ id, config, items, onChange }) => {
+// Mantine's date inputs emit string values; the query builder below needs real
+// Date objects (formatDate calls getDate), so bridge string -> Date on change.
+const toDate = (value) => (value ? new Date(value) : null);
 
-  addLocale('pt', {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sab', 'Dom'],
-    dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sab', 'Dom'],
-    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  });
-  
-  locale('pt');
+const DateRangeFilter = ({ id, config, items, onChange }) => {
 
   const _dates = [items?.length ? items[0] : null, items?.length ? items[1] : null];
 
-  const child = (
-    <div className="flex grid">
-      <div className="col-6">
-        <Calendar placeholder="Data início" showIcon showButtonBar
-          value={_dates[0]}
-          locale="pt"
-          dateFormat="dd/mm/yy" mask="99/99/9999"
-          onChange={(e) => {
-            return onChange({value: [e.value,_dates[1]]});
-          }}
-        />
-      </div>
-      <div className="col-6">
-        <Calendar placeholder="Data fim" showIcon showButtonBar
-          value={_dates[1]}
-          locale="pt"
-          dateFormat="dd/mm/yy" mask="99/99/9999"
-          onChange={(e) => {
-            return onChange({value: [_dates[0], e.value]});
-          }}
-        />
-      </div>
-    </div>
-  );
-
-
   return (
-    <React.Fragment>
-    {
-      config?.float_labels === false ?
-      <React.Fragment>
-        <label>{config.label}</label>
-        {child}
-      </React.Fragment> :
-      <React.Fragment>
-        <label>{config.label}</label>
-        {child}
-      </React.Fragment>
-    }
-    </React.Fragment>
-  )   
+    <DatesProvider settings={{ locale: 'pt' }}>
+      <label>{config.label}</label>
+      <div className="flex grid">
+        <div className="col-6">
+          <DatePickerInput placeholder="Data início" clearable
+            value={_dates[0]}
+            valueFormat="DD/MM/YYYY"
+            onChange={(value) => onChange({value: [toDate(value), _dates[1]]})}
+          />
+        </div>
+        <div className="col-6">
+          <DatePickerInput placeholder="Data fim" clearable
+            value={_dates[1]}
+            valueFormat="DD/MM/YYYY"
+            onChange={(value) => onChange({value: [_dates[0], toDate(value)]})}
+          />
+        </div>
+      </div>
+    </DatesProvider>
+  )
 
 }
 
 DateRangeFilter.getQueryParameters = (items, config) => {
   const params = [null, null];
 
-  if (!items?.length) return;  
-  
+  if (!items?.length) return;
+
   if (items[0]) {
     params[0] = formatDate(items[0], 'yyyy-mm-dd');
   }
