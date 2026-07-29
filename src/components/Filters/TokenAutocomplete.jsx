@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Combobox, Pill, PillsInput, useCombobox } from '@mantine/core';
+import { Combobox, Pill, PillsInput, ScrollArea, useCombobox } from '@mantine/core';
 
 /*
  * The Prime <AutoComplete multiple> twin used by every catalog filter: a
@@ -120,7 +120,9 @@ export default function TokenAutocomplete({
 
         <Combobox.Dropdown>
           <Combobox.Options>
-            {optionNodes.length > 0 ? optionNodes : <Combobox.Empty>Sem resultados</Combobox.Empty>}
+            {optionNodes.length > 0
+              ? <ScrollArea.Autosize mah={260} type="scroll">{optionNodes}</ScrollArea.Autosize>
+              : <Combobox.Empty>Sem resultados</Combobox.Empty>}
           </Combobox.Options>
         </Combobox.Dropdown>
       </Combobox>
