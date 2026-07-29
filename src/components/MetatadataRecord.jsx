@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
+import { Button, Card, Text, Tooltip } from '@mantine/core';
 
 import CollapsedText from './CollapsedText';
 import ViewServicesButton from './ViewServicesButton';
@@ -43,7 +42,7 @@ const getReferenceDate = (data) => {
 
 const getTopicCat = (data) => {
   if (!Array.isArray(data.topicCatLang)) return data.topicCatLang;
-  
+
   if (data.topicCatLang.length) return data.topicCatLang[0];
 }
 
@@ -60,69 +59,72 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   const footer = (
     <div className="grid">
       <div className="col-8 text-left">
-        <Button className="mr-1" size="small"
-          tooltip="Ver Ficha de Metadados">
-            <a href={metadata_url} target="_blank" rel="noopener noreferrer">Metadados</a>
-        </Button>
-        <ViewServicesButton core={core} utils={utils} data={data} size="small" className="" />
-        <DownloadServicesButton core={core} utils={utils} data={data} size="small" className="" />
+        <Tooltip label="Ver Ficha de Metadados">
+          <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
+            className="mr-1" size="xs">Metadados</Button>
+        </Tooltip>
+        <ViewServicesButton core={core} utils={utils} data={data} size="sm" className="" />
+        <DownloadServicesButton core={core} utils={utils} data={data} size="sm" className="" />
       </div>
       <div className="col-4 text-right">
         { !(componentConfig?.allow_add_map === false) &&
-        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="small" className="" />
+        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="sm" className="" />
         }
       </div>
     </div>
   );
 
 
-  const title = <div> 
-      {
-        (componentConfig?.show_record_extent || componentConfig?.show_record_extent == null) ?
-          <a href="#"
-            onMouseOver={(e) => {
-              e.preventDefault();
-              onRecordHover && onRecordHover(data);
-            }}
-            onMouseOut={(e) => {
-              e.preventDefault();
-              onRecordHover && onRecordHover(null);
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              onRecordClick && onRecordClick(data);
-            }}
-          >{data.title || data.defaultTitle}</a>
-        : data.title || data.defaultTitle
-      }
-    </div>
-  
+  const title = (componentConfig?.show_record_extent || componentConfig?.show_record_extent == null) ?
+    <a href="#"
+      onMouseOver={(e) => {
+        e.preventDefault();
+        onRecordHover && onRecordHover(data);
+      }}
+      onMouseOut={(e) => {
+        e.preventDefault();
+        onRecordHover && onRecordHover(null);
+      }}
+      onClick={(e) => {
+        e.preventDefault();
+        onRecordClick && onRecordClick(data);
+      }}
+    >{data.title || data.defaultTitle}</a>
+    : data.title || data.defaultTitle;
+
   const responsibleParty = getResponsibleParty(data);
   const referenceDate = getReferenceDate(data);
   const topicCat = getTopicCat(data);
+  const subTitle = responsibleParty?.resource || responsibleParty?.distribution || '';
 
   return (
-    <Card title={title} subTitle={responsibleParty?.resource || responsibleParty?.distribution || ''} 
-      footer={footer} header={null} className="mb-2">
-        { referenceDate && <div className="mt-1">
-          <span className="font-bold">Data de Referência{referenceDate ? ` (${referenceDate.type})` : ''}: </span>
-          <span>{referenceDate ? referenceDate.value : ''}</span>
-        </div> }
-        { topicCat && <div className="mt-1">
-          <span className="font-bold">Tema(s): </span>
-          <span>{topicCat || ''}</span>
-        </div> }
-        { data?.geographicCoverageDesc && <div className="mt-1">
-          <span className="font-bold">Cobertura: </span>
-          {Array.isArray(data?.geographicCoverageDesc) && data.geographicCoverageDesc.length ? 
-            <div>
-              {data.geographicCoverageDesc.map((g, idx) => <span key={idx}>{g.geographicCoverageDesc} </span>)}
-            </div>
-          : <span>{data?.geographicCoverageDesc}</span> }
-        </div> }      
-        <div className="mt-2" style={{"wordBreak": "break-word"}}>
-          <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
-        </div>
+    <Card withBorder shadow="sm" radius="md" padding="md" className="metadata-card mb-2">
+      <Text className="metadata-card-title" fw={500} size="lg">{title}</Text>
+      { subTitle && <Text className="metadata-card-subtitle" c="dimmed" size="sm">{subTitle}</Text> }
+
+      { referenceDate && <div className="mt-1">
+        <span className="font-bold">Data de Referência{referenceDate ? ` (${referenceDate.type})` : ''}: </span>
+        <span>{referenceDate ? referenceDate.value : ''}</span>
+      </div> }
+      { topicCat && <div className="mt-1">
+        <span className="font-bold">Tema(s): </span>
+        <span>{topicCat || ''}</span>
+      </div> }
+      { data?.geographicCoverageDesc && <div className="mt-1">
+        <span className="font-bold">Cobertura: </span>
+        {Array.isArray(data?.geographicCoverageDesc) && data.geographicCoverageDesc.length ?
+          <div>
+            {data.geographicCoverageDesc.map((g, idx) => <span key={idx}>{g.geographicCoverageDesc} </span>)}
+          </div>
+        : <span>{data?.geographicCoverageDesc}</span> }
+      </div> }
+      <div className="mt-2" style={{"wordBreak": "break-word"}}>
+        <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
+      </div>
+
+      <Card.Section withBorder inheritPadding py="xs" mt="sm">
+        {footer}
+      </Card.Section>
     </Card>
   )
 }

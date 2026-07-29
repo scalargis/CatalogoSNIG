@@ -1,80 +1,52 @@
-import React, { useState, useRef } from 'react';
-import { Button } from 'primereact/button'
-import { Dialog } from 'primereact/dialog'
+import React, { useState } from 'react';
+import { ActionIcon, Button, Group } from '@mantine/core';
+import { Dialog, IconInfoCircle } from '@scalargis/ui';
 
 
 export function Help(props)  {
-  const { className, style, utils, catalog } = props;
-
-  const { getWindowSize, showOnPortal } = utils;
+  const { className, style, catalog } = props;
 
   const [showPopup, setShowPopup] = useState(false);
-  const [size, setSize] = useState(null);
-  const [maximized, setMaximized] = useState(false);
-
-  const dialog = useRef(null);
 
   const config = catalog?.help ? catalog.help : {};
-
-  const wsize = getWindowSize();
-  const isMobile = wsize[0] <= 768;
 
   const show = props.showButton || (config?.url || config?.html || config?.description || catalog?.description);
   const disabled = props.disabled === true || !(config?.url || config?.html || config?.description || catalog?.description);
 
-  if (config.as === 'popup' && show) {    
-    const closeLabel = "Fechar";    
+  if (config.as === 'popup' && show) {
+    const title = config?.title || catalog?.title || 'Informação';
     return (
       <React.Fragment>
 
-        <Button
-          ref={el => {
-            if (el) {
-              el.style.setProperty('border-radius', '50%', 'important');
-            }
-          }}        
-          title={config?.title || catalog?.title || 'Informação'}
+        <ActionIcon
+          variant="subtle"
+          radius="xl"
+          title={title}
           className={className}
           style={style}
-          icon="pi pi-info-circle"
           disabled={disabled}
+          aria-label={title}
           onClick={e => { e.preventDefault(); setShowPopup(true) }}
-        />
+        >
+          <IconInfoCircle />
+        </ActionIcon>
 
-        {showOnPortal(<Dialog
-          ref={dialog}        
-          header={config?.title || catalog?.title || 'Informação'}
-          visible={showPopup}
-          style={{width: isMobile ? '90%' : '50vw', height: '80%' }}
+        <Dialog
+          title={title}
+          opened={showPopup}
+          onClose={() => setShowPopup(false)}
           maximizable
-          maximized={maximized} 
-          modal
-          footer={(
-            <div className="grid">
-              <div className="col" style={{ textAlign: 'right'}}>
-                <Button label={closeLabel} onClick={e => setShowPopup(false)} />
-              </div>
-            </div>
-          )}
-          onShow={() => {
-            const elem = dialog.current.contentEl;
-            setSize({x: elem.clientWidth, y: elem.clientHeight - 25 });
-          }}
-          onResize={e => {
-            const elem = dialog.current.contentEl;
-            setSize({x: elem.clientWidth, y: elem.clientHeight - 25 });
-          }}
-          onMaximize={e => {
-            setMaximized(e.maximized);
-            const elem = dialog.current.contentEl;
-            setTimeout(() => {setSize({x: elem.clientWidth, y: elem.clientHeight - 25 }, 200)});
-          }}
-          onHide={e => setShowPopup(false)}>
+          height="80vh"
+          footer={
+            <Group justify="flex-end">
+              <Button onClick={e => setShowPopup(false)}>Fechar</Button>
+            </Group>
+          }>
 
           {(() => {
             if (config.url) {
               return (
-                <iframe title={config.title || 'Ajuda'} src={config.url} style={ size ? { border: 'none', width: '100%', height: size.y } : {border: 'none', width: '100%'}}></iframe>
+                <iframe title={config.title || 'Ajuda'} src={config.url} style={{ border: 'none', width: '100%', height: '100%' }}></iframe>
               )
             } else if (config.html) {
               return (
@@ -83,33 +55,41 @@ export function Help(props)  {
             } else if (config.description || catalog.description) {
               return (
                 <div>{catalog.description || catalog.description || ''}</div>
-              )            
+              )
             } else {
               return null;
             }
-          })()}            
-          
-        </Dialog>)}
+          })()}
+
+        </Dialog>
 
       </React.Fragment>
     )
-  } else if (config.as === 'external' && show) { 
+  } else if (config.as === 'external' && show) {
     return (
-      <Button
+      <ActionIcon
+        variant="subtle"
+        radius="xl"
         title={config?.title || catalog?.title || 'Informação'}
         className={className}
-        icon="pi pi-info-circle"
         disabled={props.disabled || !config.url}
-        onClick={e => { e.preventDefault(); window.open(config.url)}} />
+        aria-label={config?.title || catalog?.title || 'Informação'}
+        onClick={e => { e.preventDefault(); window.open(config.url)}}>
+        <IconInfoCircle />
+      </ActionIcon>
     )
   } else if (props.showButton) {
     return (
-      <Button
+      <ActionIcon
+        variant="subtle"
+        radius="xl"
         title={config?.title || catalog?.title || 'Informação'}
         className={className}
-        icon="pi pi-info-circle"
-        disabled={true} />
-    )    
+        disabled={true}
+        aria-label={config?.title || catalog?.title || 'Informação'}>
+        <IconInfoCircle />
+      </ActionIcon>
+    )
   } else {
     return null;
   }

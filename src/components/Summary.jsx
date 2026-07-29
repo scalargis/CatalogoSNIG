@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Button } from 'primereact/button';
-import { ButtonGroup } from  'primereact/buttongroup';
+import { Button } from '@mantine/core';
+import { IconMinusCircle, IconPlusCircle } from '@scalargis/ui';
 
 import MorphFacet from './Facets/MorphFacet';
 import summaryConfig from '../summay.config.json';
@@ -86,17 +86,17 @@ export default function Summary({ core, utils, config, title, data, showAll=fals
       {data.summary["@count"] > 0 && <React.Fragment>
         <div className="grid mt-1">        
           <div className="col-12 text-center">
-            <ButtonGroup>
-              <Button label="Expandir" icon="pi pi-plus-circle" outlined size="small"
+            <Button.Group>
+              <Button variant="outline" size="xs" leftSection={<IconPlusCircle />}
                 onClick={() => {
                   setCollapsedFacets([]);
-                }} />
-              <Button label="Recolher" icon="pi pi-minus-circle" outlined size="small"
+                }}>Expandir</Button>
+              <Button variant="outline" size="xs" leftSection={<IconMinusCircle />}
                 onClick={() => {
                   setCollapsedFacets(dimensions.map(d=> d["@name"]));
                 }}
-              />
-            </ButtonGroup>
+              >Recolher</Button>
+            </Button.Group>
           </div>
         </div>
 

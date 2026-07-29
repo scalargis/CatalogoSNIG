@@ -6,39 +6,11 @@
   width: 50%;
 }
 
-.catolog-snig .p-toggleable-content .p-panel-content {
-  /*padding-left: 0.15rem;*/
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  overflow-x: hidden;
-}
-
-.catolog-snig .metadata-list.p-tabview .p-tabview-panels {
-  padding: 0px;
-}
-
-.catolog-snig .metadata-list.p-tabview .p-tabview-panel .p-dataview .p-dataview-content {
-  padding: 0px;
-}
-
-.catolog-snig .metadata-list.p-tabview .p-tabview-panel .p-dataview .p-dataview-content .p-card-title {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.catolog-snig .metadata-list.p-tabview .p-tabview-panel .p-dataview .p-dataview-content .p-card-content button.p-button-link {
-  font-weight: normal;
-}
-
-.catolog-snig .metadata-list.p-tabview button>a, .metadata-list.p-tabview button>a:visited {
-  color: inherit;
-}
-
 .catolog-snig .metadata-list .facet .facet-title i {
   width: 15px;
-  text-align: center;  
+  text-align: center;
   font-size: .8rem;
-}  
+}
 
 .catolog-snig .metadata-list .facet-title {
   font-size: 14px;
@@ -47,7 +19,7 @@
   margin-bottom: 5px;
   padding: 0 0 0 0;
   color: #333;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .catolog-snig .metadata-list .facet-extras-button {
@@ -55,7 +27,7 @@
   font-weight: bold;
   margin-bottom: 5px;
   padding: 0 0 0 0;
-  cursor: pointer;   
+  cursor: pointer;
   color: #01689b;
 }
 
@@ -81,7 +53,7 @@
 }
 
 .catolog-snig .metadata-list .facet-item {
-  cursor: pointer; 
+  cursor: pointer;
 
   margin-bottom: 0px;
   font-weight: 500;
@@ -102,7 +74,7 @@
   font-size: 13px !important;
   font-weight: bold;
   max-width: calc(100% - 45px);
-}    
+}
 .catolog-snig .metadata-list .facet-item .facet-item-label:hover {
   color: #337ab7;
 }
@@ -118,37 +90,9 @@
   font-size: 13px;
 }
 
-.catolog-snig .metadata-list .p-paginator {
-  justify-content: center;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-
-.catolog-snig .p-autocomplete-token.p-highlight {
-  margin-top: 0.3rem;
-}
-
-.catolog-snig .text-filter .p-autocomplete-token-label {
-	flex-shrink: 1;
-  flex-grow: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  max-width: 255px;
-}
-
-.catolog-snig .facet.facet-search .facet-content .p-flex.p-grid>.col-12{
-  padding-right: 0px;
-} 
-
 .catolog-snig .facet.facet-search .facet-search-inputtext {
   padding-top: 0px;
   padding-bottom: 0px
-}
-
-.catolog-snig .facet.facet-search .p-inputgroup-addon {
-  padding: 0px;
 }
 
 .catolog-snig .facet.facet-search button {
@@ -164,27 +108,15 @@
   max-width: calc(100% - 30px);
 }
 
-.catolog-snig .p-inputgroup .btn-help {
-  border-top-right-radius: 50% !important;
-  border-bottom-right-radius: 50% !important;
-  background-color: transparent;
-  color: #2196F3;
-  border-color: transparent;  
-}
-.catolog-snig .p-inputgroup .btn-help:hover {
-  border-top-right-radius: 50% !important;
-  border-bottom-right-radius: 50% !important;
+/* Cap long selected tokens like the old autocomplete token label did. */
+.catolog-snig .text-filter .mantine-Pill-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 255px;
 }
 
-.catolog-snig .p-float-label .p-inputwrapper-focus ~ label {
-  background-color: white;
-  color: #2196F3;
-  padding: 5px;
-  top: -5px;
-}
-
-/* TODO: move to core */
-.layout-sidebar-panel .p-blockui-container .p-progress-spinner {
-  top: calc(45vh);
-  position: fixed;
+.catolog-snig .token-autocomplete-label {
+  display: block;
+  margin-bottom: 4px;
 }

@@ -1,49 +1,37 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { Menu } from 'primereact/menu';
-import { Button } from 'primereact/button';
-import classnames from 'classnames';
+import { Button, Menu } from '@mantine/core';
+import { IconPlus, IconRefresh } from '@scalargis/ui';
 
 import { getViewLinks } from '../utils';
 
 
 export default function AddToMapButton({ core, utils, componentConfig, data, className, size }) {
 
-  const menu = useRef(null);
-
   const links = (getViewLinks(data) || []).filter((l) => {
     if (Array.isArray(componentConfig?.allow_service_types)) {
       return componentConfig?.allow_service_types.includes(l.type.toUpperCase());
     }
     return true;
-  }).map(l => {
-    return { 
-      label: l.type,
-      icon: 'pi pi-refresh',
-      template: (item, options) => {
-        return (
-            /* custom element */
-            <a className={classnames(options.className, 'p-2')} target={item.target} onClick={options.onClick} title={l.url}>
-              <span className={options.labelClassName}>{item.label}</span>
-            </a>
-        );
-      },
-      command: (e) => {
-        const data = {
-          type: l.type,
-          url: l.url
-        }
-        core.pubsub.publish("ThemeWizard/AddService", {...data, callback: null});
-      }
-    }
   });
 
   if (!links.length) return null;
 
   return (
-    <div>
-      <Menu model={links} popup ref={menu} id="popup_menu" />
-      <Button outlined size={size} className={className} label="Mapa" icon="pi pi-plus" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup />
-    </div>
+    <Menu shadow="md" position="bottom-end">
+      <Menu.Target>
+        <Button variant="outline" size={size} className={className} leftSection={<IconPlus />}>Mapa</Button>
+      </Menu.Target>
+      <Menu.Dropdown>
+        {links.map((l, idx) => (
+          <Menu.Item key={idx} title={l.url} leftSection={<IconRefresh />}
+            onClick={() => {
+              core.pubsub.publish("ThemeWizard/AddService", { type: l.type, url: l.url, callback: null });
+            }}>
+            {l.type}
+          </Menu.Item>
+        ))}
+      </Menu.Dropdown>
+    </Menu>
   )
 }

@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
 
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
+import { ActionIcon, Button, Group, Tooltip } from '@mantine/core';
+import { Dialog, IconCopy } from '@scalargis/ui';
 import { copyToClipboard, getViewLinks } from '../utils';
 
 
 export default function ViewServicesButton({ core, utils, data, className, size }) {
-  const { getWindowSize, showOnPortal } = utils;
 
   const [showForm, setShowForm] = useState(false);
-  
-  const wsize = getWindowSize();
-  const isMobile = wsize[0] <= 768;
-  
 
   const openForm = () => {
     setShowForm(true);
   }
-
-  const footer = (
-    <div>
-        <Button label="Fechar" icon="pi pi-times" onClick={()=>setShowForm(false)} />
-    </div>
-  );  
 
   const links = getViewLinks(data) || [];
 
@@ -30,38 +19,43 @@ export default function ViewServicesButton({ core, utils, data, className, size 
 
   return (
     <React.Fragment>
-      <Button icon="pi pi-map" outlined severity="info" size={size} className={`${className || ''} mr-1`}
-        tooltip="Ver Url de serviço de visualização (WMS, WMS-C, WMTS)"
-        onClick={e => openForm()}
-      />      
+      <Tooltip label="Ver Url de serviço de visualização (WMS, WMS-C, WMTS)">
+        <ActionIcon variant="outline" color="informative" size={size} className={`${className || ''} mr-1`}
+          aria-label="Serviços de visualização"
+          onClick={e => openForm()}>
+          <span className="pi pi-map" />
+        </ActionIcon>
+      </Tooltip>
 
-      {showOnPortal(<Dialog
-        header={data?.title || 'Serviços de Visualização'}
-        footer={footer}
-        visible={showForm}
-        style={{width: isMobile ? '90%' : '35vw' }} 
-        modal 
-        onHide={e => setShowForm(false)}>
-          { links.map((l, idx) => {
-            return <div key={idx}>
-              <div><strong>{l.type}:</strong></div>              
-              <div className="grid">
-                <div className="col-12 md:col-11" style={{"wordBreak": "break-all"}}>
-                  {l.url}
-                </div>
-                <div className="col-12 md:col-1">
-                  <Button
-                    style={{marginLeft:"0px", color: "#2196F"}}
-                    icon="pi pi-copy"
-                    size="small" rounded outlined severity="help"
-                    onClick={(e) => { e.preventDefault(); e.currentTarget.blur(); copyToClipboard(l.url) }}
-                    tooltip="Copiar Url" tooltipOptions={{position: 'top'}}
-                  />
-                </div>
+      <Dialog
+        title={data?.title || 'Serviços de Visualização'}
+        opened={showForm}
+        onClose={() => setShowForm(false)}
+        footer={
+          <Group justify="flex-end">
+            <Button leftSection={<span className="pi pi-times" />} onClick={()=>setShowForm(false)}>Fechar</Button>
+          </Group>
+        }>
+        { links.map((l, idx) => {
+          return <div key={idx}>
+            <div><strong>{l.type}:</strong></div>
+            <div className="grid">
+              <div className="col-12 md:col-11" style={{"wordBreak": "break-all"}}>
+                {l.url}
+              </div>
+              <div className="col-12 md:col-1">
+                <Tooltip label="Copiar Url" position="top">
+                  <ActionIcon variant="outline" color="grape" radius="xl" size="sm"
+                    aria-label="Copiar Url"
+                    onClick={(e) => { e.preventDefault(); e.currentTarget.blur(); copyToClipboard(l.url) }}>
+                    <IconCopy />
+                  </ActionIcon>
+                </Tooltip>
               </div>
             </div>
-          }) }
-      </Dialog>)}
+          </div>
+        }) }
+      </Dialog>
 
     </React.Fragment>
   )
