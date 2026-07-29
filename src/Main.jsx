@@ -1,12 +1,41 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from 'primereact/button';
-import { Panel } from 'primereact/panel';
-import { ProgressSpinner } from 'primereact/progressspinner';
+import React, { useState, useRef } from 'react';
+import { ActionIcon, LoadingOverlay, Paper, Text } from '@mantine/core';
 
 import Catalogs from './Catalogs';
 import CatalogSNIG from './CatalogSNIG';
 
 import './style.css';
+
+/**
+ * Round main-menu button — the viewer plugin-contract control Core.jsx mounts
+ * in the sidebar strip. Mirrors libs/components MainMenuButton: `active`
+ * derives from the shell's `p-button-outlined` className contract, and the
+ * `p-button-*` tokens are stripped before reaching the DOM.
+ */
+function MainMenuButton({ className = '', title, style, icon, onClick, children }) {
+  const isActive = !String(className).includes('p-button-outlined');
+  const passthrough = String(className)
+    .split(/\s+/)
+    .filter((c) => c && !c.startsWith('p-button'))
+    .join(' ');
+
+  return (
+    <ActionIcon
+      type="button"
+      variant={isActive ? 'filled' : 'outline'}
+      size={38}
+      radius="xl"
+      className={passthrough || undefined}
+      style={style}
+      title={title}
+      aria-label={title}
+      aria-pressed={isActive}
+      onClick={onClick}
+    >
+      {children ?? (React.isValidElement(icon) ? icon : <i className={icon} aria-hidden="true" />)}
+    </ActionIcon>
+  );
+}
 
 /**
  * Main menu component
@@ -19,23 +48,24 @@ export function MainMenu({ className, config, actions, record }) {
 
       if (record?.config_json?.btn_image) {
         return (
-          <Button
+          <MainMenuButton
             title={title}
-            className={className ? className + ' catalog-snig-main-menu-btn' : null}
-            icon="pi"
+            className={className ? className + ' catalog-snig-main-menu-btn' : ''}
             style={{ backgroundImage: `url("${record.config_json.btn_image}")` }}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
-          />
+          >
+            <span />
+          </MainMenuButton>
         )
       }
 
       return (
-          <Button
+          <MainMenuButton
             title={title}
             className={className}
             icon={record?.config_json?.btn_icon ? record.config_json.btn_icon : "pi pi-book"}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
-          />         
+          />
       )
     } else {
       return null;
@@ -43,7 +73,7 @@ export function MainMenu({ className, config, actions, record }) {
 }
 
 export default function Main(props) {
-  
+
   const {as, core, config, actions, record, utils} = props;
   const { viewer, mainMap } = config;
 
@@ -52,32 +82,8 @@ export default function Main(props) {
 
   const ref = useRef(null);
   const [blockedPanel, setBlockedPanel] = useState(false);
-  
+
   const className = config?.classname ? `catolog-snig ${config?.classname}` : 'catolog-snig';
-
-
-  const getBlockFullHeight = () => {
-
-    const oDiv = ref.current;
-    
-    let clientHeight = 0;
-    let height = 0;
-    
-    try {
-      clientHeight = oDiv.clientHeight;
-    
-      const sOriginalOverflow = oDiv.style.overflow;
-      const sOriginalHeight = oDiv.style.height;
-      oDiv.style.overflow = "";
-      oDiv.style.height = "";
-
-      height = oDiv.offsetHeight;
-      oDiv.style.height = sOriginalHeight;
-      oDiv.style.overflow = sOriginalOverflow;
-    } catch {}
-        
-    return clientHeight > height ? clientHeight : height;
-  }
 
   function renderContent() {
 
@@ -108,21 +114,21 @@ export default function Main(props) {
         utils={utils}
         componentId={record?.id}
         blockPanel={setBlockedPanel}
-      />  
-    )  
+      />
+    )
   }
 
   if (as === 'panel') return (
-    <div ref={ref} className="p-blockui-container" style={{height: 'calc(100%)'}}>
-      <Panel header={header} className={className}>
+    <div ref={ref} style={{height: 'calc(100%)', position: 'relative'}}>
+      <LoadingOverlay visible={blockedPanel} zIndex={1003}
+        loaderProps={{ size: 50 }} overlayProps={{ blur: 1 }} />
+      <Paper className={className} p="md" withBorder>
+        { header && <Text fw={600} mb="sm">{header}</Text> }
         { renderContent() }
-      </Panel>
-      { blockedPanel && <div className="p-blockui p-component-overlay p-component-overlay-enter" style={{zIndex: 1003, height: getBlockFullHeight()}}>
-        <ProgressSpinner style={{width: '50px', height: '50px'}} strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/>
-      </div> }
+      </Paper>
     </div>
 
-  )  
+  )
 
   // Render component
   return renderContent()
