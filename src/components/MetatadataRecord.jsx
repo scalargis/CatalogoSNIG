@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Text, Tooltip } from '@mantine/core';
+import { Button, Card, Group, Text, Tooltip } from '@mantine/core';
 
 import CollapsedText from './CollapsedText';
 import ViewServicesButton from './ViewServicesButton';
@@ -57,21 +57,19 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   }
 
   const footer = (
-    <div className="grid">
-      <div className="col-8 text-left">
+    <Group justify="space-between" gap="xs" wrap="wrap">
+      <Group gap="xs" wrap="wrap">
         <Tooltip label="Ver Ficha de Metadados">
           <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
-            className="mr-1" size="xs">Metadados</Button>
+            size="sm">Metadados</Button>
         </Tooltip>
         <ViewServicesButton core={core} utils={utils} data={data} size="sm" className="" />
         <DownloadServicesButton core={core} utils={utils} data={data} size="sm" className="" />
-      </div>
-      <div className="col-4 text-right">
-        { !(componentConfig?.allow_add_map === false) &&
-        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="sm" className="" />
-        }
-      </div>
-    </div>
+      </Group>
+      { !(componentConfig?.allow_add_map === false) &&
+      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="sm" className="" />
+      }
+    </Group>
   );
 
 

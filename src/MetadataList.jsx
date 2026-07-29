@@ -15,14 +15,16 @@ import { getServiceUrl } from './utils';
 
 
 const rowsPerPageOptions = [
-  { label: '10 registos por página', value: '10' },
-  { label: '20 registos por página', value: '20' },
-  { label: '50 registos por página', value: '50' },
-  { label: '100 registos por página', value: '100' }
+  { label: '10 por página', value: '10' },
+  { label: '20 por página', value: '20' },
+  { label: '50 por página', value: '50' },
+  { label: '100 por página', value: '100' }
 ];
 
 // The Prime DataView paginator (First/Prev/report/rows-per-page/Next/Last) as a
-// Mantine composition: page arrows + a "from a to" report + a rows-per-page Select.
+// Mantine composition. In the narrow viewer panel the arrows + report stay on one
+// line (report never wraps) and the rows-per-page Select drops to its own centred
+// line when there is no room, so nothing gets squeezed onto three lines.
 function Pager({ first, rows, total, onPageChange }) {
   const rowCount = rows || 20;
   const page = Math.floor((first < 0 ? 0 : first) / rowCount) + 1;
@@ -32,23 +34,27 @@ function Pager({ first, rows, total, onPageChange }) {
   const goto = (p) => onPageChange({ first: (p - 1) * rowCount, rows: rowCount });
 
   return (
-    <Group justify="center" gap="xs" wrap="nowrap" className="metadata-pager">
-      <ActionIcon variant="subtle" aria-label="Primeira página"
-        disabled={page <= 1} onClick={() => goto(1)}><IconAngleDoubleLeft /></ActionIcon>
-      <ActionIcon variant="subtle" aria-label="Página anterior"
-        disabled={page <= 1} onClick={() => goto(page - 1)}><IconAngleLeft /></ActionIcon>
-      <Text component="span" style={{ userSelect: 'none', textAlign: 'center' }}>
-        {first < 0 ? 1 : first + 1} a {last}
-      </Text>
-      <ActionIcon variant="subtle" aria-label="Página seguinte"
-        disabled={page >= totalPages} onClick={() => goto(page + 1)}><IconAngleRight /></ActionIcon>
-      <ActionIcon variant="subtle" aria-label="Última página"
-        disabled={page >= totalPages} onClick={() => goto(totalPages)}><IconAngleDoubleRight /></ActionIcon>
+    <Group justify="center" gap="sm" wrap="wrap" className="metadata-pager">
+      <Group gap={4} wrap="nowrap">
+        <ActionIcon variant="subtle" size="lg" aria-label="Primeira página"
+          disabled={page <= 1} onClick={() => goto(1)}><IconAngleDoubleLeft /></ActionIcon>
+        <ActionIcon variant="subtle" size="lg" aria-label="Página anterior"
+          disabled={page <= 1} onClick={() => goto(page - 1)}><IconAngleLeft /></ActionIcon>
+        <Text component="span" size="sm" px={4}
+          style={{ whiteSpace: 'nowrap', userSelect: 'none' }}>
+          {first < 0 ? 1 : first + 1} a {last}
+        </Text>
+        <ActionIcon variant="subtle" size="lg" aria-label="Página seguinte"
+          disabled={page >= totalPages} onClick={() => goto(page + 1)}><IconAngleRight /></ActionIcon>
+        <ActionIcon variant="subtle" size="lg" aria-label="Última página"
+          disabled={page >= totalPages} onClick={() => goto(totalPages)}><IconAngleDoubleRight /></ActionIcon>
+      </Group>
       <Select
+        size="sm"
         data={rowsPerPageOptions}
         value={String(rowCount)}
         allowDeselect={false}
-        style={{ width: '11rem' }}
+        w={150}
         onChange={(value) => value && onPageChange({ first: 0, rows: parseInt(value) })} />
     </Group>
   );
@@ -148,19 +154,22 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
 
         <Tabs.Panel value="1" keepMounted>
           { total > 0 ?
-          <Stack gap="xs" className="metadata-results mt-2">
-            <Group justify="space-between" align="center" wrap="wrap" className="mt-2 mb-2">
-              <div>{total}<span style={{"fontWeight": "normal"}}> resultado(s) encontrado(s)</span></div>
+          <Stack gap="md" className="metadata-results mt-3">
+            <Group justify="space-between" align="center" wrap="wrap" gap="xs">
+              <Text component="div" fw={600}>
+                {total}<Text component="span" fw={400}> resultado(s) encontrado(s)</Text>
+              </Text>
               { sortOptions?.length > 0 &&
                 <Select
                   data={sortSelectData}
                   value={sortBy || null}
                   placeholder="Ordenar por"
-                  style={{ minWidth: '14rem' }}
+                  size="sm"
+                  style={{ flex: '1 1 14rem', minWidth: '14rem' }}
                   onChange={onSortChange} /> }
             </Group>
             <Pager first={first} rows={rows} total={total} onPageChange={onPageChange} />
-            <Stack gap="xs">
+            <Stack gap="sm">
               {metadata.map((record, idx) => (
                 <MetadataRecord key={idx} {...childProps} data={record} />
               ))}
