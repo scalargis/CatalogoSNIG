@@ -57,15 +57,15 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   }
 
   const footer = (
-    <Group justify="center" gap="xs" wrap="wrap">
+    <Group justify="center" gap={6} wrap="nowrap">
       <Tooltip label="Ver Ficha de Metadados">
         <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
-          size="xs">Metadados</Button>
+          size="compact-sm">Metadados</Button>
       </Tooltip>
-      <ViewServicesButton core={core} utils={utils} data={data} size={30} className="" />
-      <DownloadServicesButton core={core} utils={utils} data={data} size={30} className="" />
+      <ViewServicesButton core={core} utils={utils} data={data} size={28} className="" />
+      <DownloadServicesButton core={core} utils={utils} data={data} size={28} className="" />
       { !(componentConfig?.allow_add_map === false) &&
-      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="xs" className="" />
+      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" />
       }
     </Group>
   );
@@ -95,7 +95,7 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
 
   return (
     <Card withBorder shadow="sm" radius="md" padding="sm" className="metadata-card mb-2">
-      <Text className="metadata-card-title" fw={600} fz="0.95rem" lh={1.3}>{title}</Text>
+      <Text className="metadata-card-title" fw={600} fz="1.05rem" lh={1.3}>{title}</Text>
       { subTitle && <Text className="metadata-card-subtitle" c="dimmed" size="xs" mt={2}>{subTitle}</Text> }
 
       { referenceDate && <Text size="sm" mt={6}>
@@ -114,7 +114,7 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
           </span>
         : <span>{data?.geographicCoverageDesc}</span> }
       </Text> }
-      <Text size="sm" mt={8} style={{"wordBreak": "break-word"}}>
+      <Text size="xs" mt={8} style={{"wordBreak": "break-word"}}>
         <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
       </Text>
 
