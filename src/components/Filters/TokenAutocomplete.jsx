@@ -121,7 +121,7 @@ export default function TokenAutocomplete({
         <Combobox.Dropdown>
           <Combobox.Options>
             {optionNodes.length > 0
-              ? <ScrollArea.Autosize mah={260} type="scroll">{optionNodes}</ScrollArea.Autosize>
+              ? <ScrollArea.Autosize mah={260} type="auto">{optionNodes}</ScrollArea.Autosize>
               : <Combobox.Empty>Sem resultados</Combobox.Empty>}
           </Combobox.Options>
         </Combobox.Dropdown>

@@ -57,17 +57,15 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   }
 
   const footer = (
-    <Group justify="space-between" gap="xs" wrap="wrap">
-      <Group gap="xs" wrap="wrap">
-        <Tooltip label="Ver Ficha de Metadados">
-          <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
-            size="sm">Metadados</Button>
-        </Tooltip>
-        <ViewServicesButton core={core} utils={utils} data={data} size="sm" className="" />
-        <DownloadServicesButton core={core} utils={utils} data={data} size="sm" className="" />
-      </Group>
+    <Group justify="center" gap="xs" wrap="wrap">
+      <Tooltip label="Ver Ficha de Metadados">
+        <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
+          size="xs">Metadados</Button>
+      </Tooltip>
+      <ViewServicesButton core={core} utils={utils} data={data} size={30} className="" />
+      <DownloadServicesButton core={core} utils={utils} data={data} size={30} className="" />
       { !(componentConfig?.allow_add_map === false) &&
-      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="sm" className="" />
+      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="xs" className="" />
       }
     </Group>
   );
@@ -96,29 +94,29 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   const subTitle = responsibleParty?.resource || responsibleParty?.distribution || '';
 
   return (
-    <Card withBorder shadow="sm" radius="md" padding="md" className="metadata-card mb-2">
-      <Text className="metadata-card-title" fw={500} size="lg">{title}</Text>
-      { subTitle && <Text className="metadata-card-subtitle" c="dimmed" size="sm">{subTitle}</Text> }
+    <Card withBorder shadow="sm" radius="md" padding="sm" className="metadata-card mb-2">
+      <Text className="metadata-card-title" fw={600} fz="0.95rem" lh={1.3}>{title}</Text>
+      { subTitle && <Text className="metadata-card-subtitle" c="dimmed" size="xs" mt={2}>{subTitle}</Text> }
 
-      { referenceDate && <div className="mt-1">
+      { referenceDate && <Text size="sm" mt={6}>
         <span className="font-bold">Data de Referência{referenceDate ? ` (${referenceDate.type})` : ''}: </span>
         <span>{referenceDate ? referenceDate.value : ''}</span>
-      </div> }
-      { topicCat && <div className="mt-1">
+      </Text> }
+      { topicCat && <Text size="sm" mt={4}>
         <span className="font-bold">Tema(s): </span>
         <span>{topicCat || ''}</span>
-      </div> }
-      { data?.geographicCoverageDesc && <div className="mt-1">
+      </Text> }
+      { data?.geographicCoverageDesc && <Text size="sm" mt={4}>
         <span className="font-bold">Cobertura: </span>
         {Array.isArray(data?.geographicCoverageDesc) && data.geographicCoverageDesc.length ?
-          <div>
+          <span>
             {data.geographicCoverageDesc.map((g, idx) => <span key={idx}>{g.geographicCoverageDesc} </span>)}
-          </div>
+          </span>
         : <span>{data?.geographicCoverageDesc}</span> }
-      </div> }
-      <div className="mt-2" style={{"wordBreak": "break-word"}}>
+      </Text> }
+      <Text size="sm" mt={8} style={{"wordBreak": "break-word"}}>
         <CollapsedText text={data?.abstract} maxLength={300} showAll={false} />
-      </div>
+      </Text>
 
       <Card.Section withBorder inheritPadding py="xs" mt="sm">
         {footer}
