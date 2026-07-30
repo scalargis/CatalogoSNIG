@@ -122,7 +122,7 @@ export default function Main(props) {
     <div ref={ref} style={{height: 'calc(100%)', position: 'relative'}}>
       <LoadingOverlay visible={blockedPanel} zIndex={1003}
         loaderProps={{ size: 50 }} overlayProps={{ blur: 1 }} />
-      <Paper className={className} p="md" withBorder>
+      <Paper className={className} p="xs" withBorder>
         { header && <Text fw={600} mb="sm">{header}</Text> }
         { renderContent() }
       </Paper>

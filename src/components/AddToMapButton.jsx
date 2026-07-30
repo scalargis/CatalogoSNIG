@@ -20,7 +20,7 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
   return (
     <Menu shadow="md" position="bottom-end">
       <Menu.Target>
-        <Button variant="outline" size={size} className={className} leftSection={<IconPlus />}>Mapa</Button>
+        <Button variant="outline" size={size} className={className} leftSection={<IconPlus />} style={{ flexShrink: 0 }}>Mapa</Button>
       </Menu.Target>
       <Menu.Dropdown>
         {links.map((l, idx) => (

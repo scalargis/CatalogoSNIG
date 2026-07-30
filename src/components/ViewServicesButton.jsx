@@ -21,7 +21,7 @@ export default function ViewServicesButton({ core, utils, data, className, size 
     <React.Fragment>
       <Tooltip label="Ver Url de serviço de visualização (WMS, WMS-C, WMTS)">
         <ActionIcon variant="outline" color="informative" size={size} className={`${className || ''} mr-1`}
-          aria-label="Serviços de visualização"
+          aria-label="Serviços de visualização" style={{ flexShrink: 0 }}
           onClick={e => openForm()}>
           <span className="pi pi-map" />
         </ActionIcon>

@@ -21,7 +21,7 @@ export default function DownloadServicesButton({ core, utils, data, className, s
     <React.Fragment>
       <Tooltip label="Ver Url de serviço de descarregamento (Ficheiro, WFS, WCS, ATOM)">
         <ActionIcon variant="outline" color="informative" size={size} className={`${className || ''} mr-1`}
-          aria-label="Serviços de descarregamento"
+          aria-label="Serviços de descarregamento" style={{ flexShrink: 0 }}
           onClick={e => openForm()}>
           <IconDownload />
         </ActionIcon>
