@@ -57,7 +57,7 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
   }
 
   const footer = (
-    <Group justify="center" gap={6} wrap="nowrap">
+    <Group justify="center" gap="xs" wrap="wrap">
       <Tooltip label="Ver Ficha de Metadados">
         <Button component="a" href={metadata_url} target="_blank" rel="noopener noreferrer"
           size="compact-sm">Metadados</Button>
