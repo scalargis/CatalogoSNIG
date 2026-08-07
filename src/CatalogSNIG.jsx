@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router';
 
 import { Alert, Button } from '@mantine/core';
-import { notify } from '@scalargis/ui';
+import { notify, TourTarget } from '@scalargis/ui';
 
 import VectorLayer from 'ol/layer/Vector'
 import { Vector } from 'ol/source';
@@ -660,29 +660,33 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   return (
     <React.Fragment>
       {catalog_cfg?.show_content_header !== false ? catalog_cfg?.content_header ? <Header config={catalog_cfg} /> : <HeaderSNIG /> : null}
-      <div className="grid pt-3">
-        <Filters url={url} float_labels={catalog_cfg?.float_labels} filters={filters} filtersItems={filtersItems}
-          onFilterChange={(filterId, e) => {
-            const new_values = {...filtersItems};
-            new_values[filterId] = e.value || [];
-            setFiltersItems(new_values);
-          }}
-          />
-      </div>
+      <TourTarget id="catalogosnig:filters">
+        <div className="grid pt-3">
+          <Filters url={url} float_labels={catalog_cfg?.float_labels} filters={filters} filtersItems={filtersItems}
+            onFilterChange={(filterId, e) => {
+              const new_values = {...filtersItems};
+              new_values[filterId] = e.value || [];
+              setFiltersItems(new_values);
+            }}
+            />
+        </div>
+      </TourTarget>
       <div className="grid pt-2">
         <div className="col" />
         <div className="col text-right">
-          <Button type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              saveMapExtent();
-              setSearchParams({
-                ...searchParams,
-                from: 1
-              });
-              setSearchCallback(null);
-            }}
-          >Pesquisar</Button>
+          <TourTarget id="catalogosnig:search">
+            <Button type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                saveMapExtent();
+                setSearchParams({
+                  ...searchParams,
+                  from: 1
+                });
+                setSearchCallback(null);
+              }}
+            >Pesquisar</Button>
+          </TourTarget>
         </div>
       </div>
     </React.Fragment>

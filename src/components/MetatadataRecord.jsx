@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button, Card, Group, Text, Tooltip } from '@mantine/core';
+import { TourTarget } from '@scalargis/ui';
 
 import CollapsedText from './CollapsedText';
 import ViewServicesButton from './ViewServicesButton';
@@ -47,7 +48,7 @@ const getTopicCat = (data) => {
 }
 
 
-export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data, onRecordHover, onRecordClick }) {
+export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data, onRecordHover, onRecordClick, firstResult = false }) {
 
   let metadata_url = componentConfig.url + (componentConfig?.metadata_url || '/srv/por/catalog.search#/metadata/');
   if (metadata_url.indexOf('{uuid}') > -1) {
@@ -64,9 +65,17 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
       </Tooltip>
       <ViewServicesButton core={core} utils={utils} data={data} size={28} className="" />
       <DownloadServicesButton core={core} utils={utils} data={data} size={28} className="" />
-      { !(componentConfig?.allow_add_map === false) &&
-      <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" />
-      }
+      { !(componentConfig?.allow_add_map === false) && (() => {
+        const addBtn = (
+          <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" />
+        );
+        // Only the first result carries the onboarding target, so the tour
+        // spotlights one "+ Mapa" button, not every row (the registry keeps one
+        // element per step id).
+        return firstResult
+          ? <TourTarget id="catalogosnig:add-map">{addBtn}</TourTarget>
+          : addBtn;
+      })() }
     </Group>
   );
 

@@ -6,6 +6,7 @@ import {
   IconAngleDoubleRight,
   IconAngleLeft,
   IconAngleRight,
+  TourTarget,
 } from '@scalargis/ui';
 
 import MetadataRecord from './components/MetatadataRecord';
@@ -153,6 +154,7 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
         </Tabs.Panel>
 
         <Tabs.Panel value="1" keepMounted>
+          <TourTarget id="catalogosnig:results">
           { total > 0 ?
           <Stack gap="md" className="metadata-results mt-3">
             <Group justify="space-between" align="center" wrap="wrap" gap="xs">
@@ -171,7 +173,7 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
             <Pager first={first} rows={rows} total={total} onPageChange={onPageChange} />
             <Stack gap="sm">
               {metadata.map((record, idx) => (
-                <MetadataRecord key={idx} {...childProps} data={record} />
+                <MetadataRecord key={idx} {...childProps} data={record} firstResult={idx === 0} />
               ))}
             </Stack>
             <Pager first={first} rows={rows} total={total} onPageChange={onPageChange} />
@@ -182,6 +184,7 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
             </div>
           </div>
           }
+          </TourTarget>
         </Tabs.Panel>
       </Tabs>
     </div>

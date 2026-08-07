@@ -1,10 +1,138 @@
 import React, { useState, useRef } from 'react';
+import i18next from 'i18next';
 import { ActionIcon, LoadingOverlay, Paper, Text } from '@mantine/core';
+import { TourTarget } from '@scalargis/ui';
 
 import Catalogs from './Catalogs';
 import CatalogSNIG from './CatalogSNIG';
 
 import './style.css';
+
+/* ==========================================================================
+   Onboarding: the self path (Phase 5).
+
+   CatalogoSNIG ships its own tour steps. The base help catalog does not hold
+   them. Each step id namespaces on the component slug. The step targets an
+   element inside the component's own panel, wrapped with <TourTarget> below
+   and in CatalogSNIG.jsx / MetadataList / MetatadataRecord. Core.jsx reads
+   this export into its self-step registry and merges it with the base steps.
+
+   The copy ships here, in the component repo, not in the viewer help base. It
+   registers into the i18next "common" namespace, the same namespace the base
+   onboarding copy uses, so t("onboarding.catalogosnig.*") follows the locale.
+   ========================================================================== */
+
+const CATALOGOSNIG_ONBOARDING_PT = {
+  onboarding: {
+    catalogosnig: {
+      intro: {
+        title: 'Catálogo SNIG',
+        content: 'Pesquise o catálogo de metadados do SNIG e leve temas para o mapa.',
+      },
+      filters: {
+        title: 'Filtros',
+        content: 'Comece pelo tema e pela área. As caixas dão sugestões enquanto escreve.',
+      },
+      search: {
+        title: 'Pesquisar',
+        content: 'Execute a pesquisa para ver os resultados.',
+      },
+      results: {
+        title: 'Resultados',
+        content: 'Veja os registos. Use a agregação para refinar a pesquisa.',
+      },
+      addMap: {
+        title: 'Adicionar ao mapa',
+        content: 'Nos registos com serviço, junte os temas ao mapa do visualizador.',
+      },
+    },
+  },
+};
+
+const CATALOGOSNIG_ONBOARDING_EN = {
+  onboarding: {
+    catalogosnig: {
+      intro: {
+        title: 'SNIG catalogue',
+        content: 'Search the SNIG metadata catalogue and bring themes to the map.',
+      },
+      filters: {
+        title: 'Filters',
+        content: 'Start with the theme and the area. The boxes suggest values as you type.',
+      },
+      search: {
+        title: 'Search',
+        content: 'Run the search to see the results.',
+      },
+      results: {
+        title: 'Results',
+        content: 'Browse the records. Use the aggregation to refine the search.',
+      },
+      addMap: {
+        title: 'Add to map',
+        content: 'For records with a service, add the themes to the viewer map.',
+      },
+    },
+  },
+};
+
+let onboardingRegistered = false;
+function registerCatalogosnigOnboarding() {
+  if (onboardingRegistered) return;
+  // addResourceBundle(lng, ns, resources, deep=true, overwrite=true). Deep
+  // merge, so it adds onboarding.catalogosnig without touching the base keys.
+  i18next.addResourceBundle('pt', 'common', CATALOGOSNIG_ONBOARDING_PT, true, true);
+  i18next.addResourceBundle('en', 'common', CATALOGOSNIG_ONBOARDING_EN, true, true);
+  onboardingRegistered = true;
+}
+registerCatalogosnigOnboarding();
+
+const tr = (key) => i18next.t(key);
+
+/**
+ * Self onboarding steps for CatalogoSNIG (D6). Optional named export next to
+ * default/actions/reducers. Orders start at 200, above the base range, so the
+ * catalogue steps run after the base tools. title/content use the function
+ * form so the popover follows the live locale. The engine and Core.jsx sort
+ * the merged list by order.
+ */
+export const onboardingSteps = [
+  {
+    id: 'catalogosnig:intro',
+    order: 200,
+    flow: 'viewer',
+    title: () => tr('onboarding.catalogosnig.intro.title'),
+    content: () => tr('onboarding.catalogosnig.intro.content'),
+  },
+  {
+    id: 'catalogosnig:filters',
+    order: 210,
+    flow: 'viewer',
+    title: () => tr('onboarding.catalogosnig.filters.title'),
+    content: () => tr('onboarding.catalogosnig.filters.content'),
+  },
+  {
+    id: 'catalogosnig:search',
+    order: 220,
+    flow: 'viewer',
+    title: () => tr('onboarding.catalogosnig.search.title'),
+    content: () => tr('onboarding.catalogosnig.search.content'),
+  },
+  {
+    id: 'catalogosnig:results',
+    order: 230,
+    flow: 'viewer',
+    title: () => tr('onboarding.catalogosnig.results.title'),
+    content: () => tr('onboarding.catalogosnig.results.content'),
+  },
+  {
+    id: 'catalogosnig:add-map',
+    order: 240,
+    flow: 'viewer',
+    title: () => tr('onboarding.catalogosnig.addMap.title'),
+    content: () => tr('onboarding.catalogosnig.addMap.content'),
+  },
+];
 
 /**
  * Round main-menu button — the viewer plugin-contract control Core.jsx mounts
@@ -119,15 +247,16 @@ export default function Main(props) {
   }
 
   if (as === 'panel') return (
-    <div ref={ref} style={{height: 'calc(100%)', position: 'relative'}}>
-      <LoadingOverlay visible={blockedPanel} zIndex={1003}
-        loaderProps={{ size: 50 }} overlayProps={{ blur: 1 }} />
-      <Paper className={className} p="xs" withBorder>
-        { header && <Text fw={600} mb="sm">{header}</Text> }
-        { renderContent() }
-      </Paper>
-    </div>
-
+    <TourTarget id="catalogosnig:intro">
+      <div ref={ref} style={{height: 'calc(100%)', position: 'relative'}}>
+        <LoadingOverlay visible={blockedPanel} zIndex={1003}
+          loaderProps={{ size: 50 }} overlayProps={{ blur: 1 }} />
+        <Paper className={className} p="xs" withBorder>
+          { header && <Text fw={600} mb="sm">{header}</Text> }
+          { renderContent() }
+        </Paper>
+      </div>
+    </TourTarget>
   )
 
   // Render component
