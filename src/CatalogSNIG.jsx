@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router';
 
 import { Alert, Button } from '@mantine/core';
-import { notify, TourTarget } from '@scalargis/ui';
+import { notify, TourTarget, useOptionalTour } from '@scalargis/ui';
 
 import VectorLayer from 'ol/layer/Vector'
 import { Vector } from 'ol/source';
@@ -125,6 +125,10 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   const { dispatch, Models } = config;
   const { createStyle, transformExtent } = Models.MapModel;
   const { getWindowSize } = utils;
+
+  // Guided tour (improvement 03). Null when no TourProvider sits above (the
+  // embedded shell), so the search flow below stays safe there.
+  const tour = useOptionalTour();
 
   // url params
   const external_search_params = useLocation().search;
@@ -660,35 +664,45 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   return (
     <React.Fragment>
       {catalog_cfg?.show_content_header !== false ? catalog_cfg?.content_header ? <Header config={catalog_cfg} /> : <HeaderSNIG /> : null}
-      <TourTarget id="catalogosnig:filters">
-        <div className="grid pt-3">
-          <Filters url={url} float_labels={catalog_cfg?.float_labels} filters={filters} filtersItems={filtersItems}
-            onFilterChange={(filterId, e) => {
-              const new_values = {...filtersItems};
-              new_values[filterId] = e.value || [];
-              setFiltersItems(new_values);
-            }}
-            />
+      {/* One tour target over the filters and the Pesquisar button (improvement
+          03): the combined "Filtros e pesquisa" step spotlights both. */}
+      <TourTarget id="catalogosnig:search">
+        <div>
+          <div className="grid pt-3">
+            <Filters url={url} float_labels={catalog_cfg?.float_labels} filters={filters} filtersItems={filtersItems}
+              onFilterChange={(filterId, e) => {
+                const new_values = {...filtersItems};
+                new_values[filterId] = e.value || [];
+                setFiltersItems(new_values);
+              }}
+              />
+          </div>
+          <div className="grid pt-2">
+            <div className="col" />
+            <div className="col text-right">
+              <Button type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  saveMapExtent();
+                  setSearchParams({
+                    ...searchParams,
+                    from: 1
+                  });
+                  // Advance the tour to the Results step once the search
+                  // finishes (improvement 03). The callback runs in
+                  // searchCatalog's success path, after setPanel('list'); the
+                  // Results step's before hook then waits for the list to mount.
+                  setSearchCallback(() => () => {
+                    if (tour?.active && tour?.currentStep?.id === 'catalogosnig:search') {
+                      tour.next();
+                    }
+                  });
+                }}
+              >Pesquisar</Button>
+            </div>
+          </div>
         </div>
       </TourTarget>
-      <div className="grid pt-2">
-        <div className="col" />
-        <div className="col text-right">
-          <TourTarget id="catalogosnig:search">
-            <Button type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                saveMapExtent();
-                setSearchParams({
-                  ...searchParams,
-                  from: 1
-                });
-                setSearchCallback(null);
-              }}
-            >Pesquisar</Button>
-          </TourTarget>
-        </div>
-      </div>
     </React.Fragment>
   );
 

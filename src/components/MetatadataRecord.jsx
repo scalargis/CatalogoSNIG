@@ -67,7 +67,7 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
       <DownloadServicesButton core={core} utils={utils} data={data} size={28} className="" />
       { !(componentConfig?.allow_add_map === false) && (() => {
         const addBtn = (
-          <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" />
+          <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" firstResult={firstResult} />
         );
         // Only the first result carries the onboarding target, so the tour
         // spotlights one "+ Mapa" button, not every row (the registry keeps one
