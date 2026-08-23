@@ -40,11 +40,7 @@ const CATALOGOSNIG_ONBOARDING_PT = {
       },
       addMap: {
         title: 'Adicionar ao mapa',
-        content: 'Nos registos com serviço, carregue em "+ Mapa" para ver os serviços.',
-      },
-      addMapServices: {
-        title: 'Serviços',
-        content: 'Escolha o serviço para juntar o tema ao mapa do visualizador.',
+        content: 'Nos registos com serviço, o botão "+ Mapa" abre esta lista de serviços. Escolha um serviço para juntar o tema ao mapa do visualizador.',
       },
     },
   },
@@ -67,11 +63,7 @@ const CATALOGOSNIG_ONBOARDING_EN = {
       },
       addMap: {
         title: 'Add to map',
-        content: 'For records with a service, press "+ Mapa" to see the services.',
-      },
-      addMapServices: {
-        title: 'Services',
-        content: 'Choose the service to add the theme to the viewer map.',
+        content: 'For records with a service, the "+ Mapa" button opens this list of services. Choose a service to add the theme to the viewer map.',
       },
     },
   },
@@ -109,8 +101,9 @@ export const onboardingSteps = [
     // Filters and search are one step now (improvement 03). The TourTarget in
     // CatalogSNIG.jsx wraps the filter block and the Pesquisar button together.
     // The step does not set advanceOnTargetClick: the search is async and swaps
-    // the panel to the results list, so CatalogSNIG advances the tour from the
-    // search-complete callback, not from the raw click.
+    // the panel to the results list, so CatalogSNIG advances the tour from a
+    // panel-transition effect (panel === 'list'), not from the raw click. That
+    // reacts to the real state change, so the advance is reliable.
     id: 'catalogosnig:search',
     order: 210,
     flow: 'viewer',
@@ -129,26 +122,17 @@ export const onboardingSteps = [
     content: () => tr('onboarding.catalogosnig.results.content'),
   },
   {
-    // Clicking "+ Mapa" opens the services menu and advances to the services
-    // step (improvement 07). Next also advances; the services step's before
-    // hook opens the menu on that path.
+    // One "Adicionar ao mapa" step. The "+ Mapa" button and its services menu
+    // are a single card now: the before hook opens the menu and waits for the
+    // dropdown to mount and register (the step spotlights the open menu), the
+    // after hook closes it on leave. Dismiss (pause) keeps the menu open.
     id: 'catalogosnig:add-map',
     order: 240,
     flow: 'viewer',
-    advanceOnTargetClick: true,
-    title: () => tr('onboarding.catalogosnig.addMap.title'),
-    content: () => tr('onboarding.catalogosnig.addMap.content'),
-  },
-  {
-    // Spotlight the open services menu. The before hook opens it and waits for
-    // the dropdown to mount and register; the after hook closes it on leave.
-    id: 'catalogosnig:add-map-services',
-    order: 250,
-    flow: 'viewer',
     before: async () => { openServicesMenu(); await nextTwoFrames(); },
     after: () => { closeServicesMenu(); },
-    title: () => tr('onboarding.catalogosnig.addMapServices.title'),
-    content: () => tr('onboarding.catalogosnig.addMapServices.content'),
+    title: () => tr('onboarding.catalogosnig.addMap.title'),
+    content: () => tr('onboarding.catalogosnig.addMap.content'),
   },
 ];
 

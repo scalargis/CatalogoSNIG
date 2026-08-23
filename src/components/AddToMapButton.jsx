@@ -45,7 +45,7 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
       </Menu.Target>
       <Menu.Dropdown>
         {firstResult
-          ? <TourTarget id="catalogosnig:add-map-services"><div>{items}</div></TourTarget>
+          ? <TourTarget id="catalogosnig:add-map"><div>{items}</div></TourTarget>
           : items}
       </Menu.Dropdown>
     </Menu>

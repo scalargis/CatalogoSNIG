@@ -1,11 +1,11 @@
 /* ==========================================================================
    Services-menu bridge for the guided tour (improvement 03).
 
-   The tour step catalogosnig:add-map-services spotlights the "+ Mapa" services
-   menu. That menu lives deep inside AddToMapButton, but the step's before/after
-   hooks live in Main.jsx and hold no closure over it. This module bridges the
-   two: the first result's AddToMapButton registers its open setter here, and the
-   step hooks call openServicesMenu / closeServicesMenu.
+   The tour step catalogosnig:add-map spotlights the "+ Mapa" services menu.
+   That menu lives deep inside AddToMapButton, but the step's before/after hooks
+   live in Main.jsx and hold no closure over it. This module bridges the two: the
+   first result's AddToMapButton registers its open setter here, and the step
+   hooks call openServicesMenu / closeServicesMenu.
    ========================================================================== */
 
 let setMenuOpen = null;

@@ -129,6 +129,13 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   // Guided tour (improvement 03). Null when no TourProvider sits above (the
   // embedded shell), so the search flow below stays safe there.
   const tour = useOptionalTour();
+  // Read the live tour handle from a ref so the results-advance effect never
+  // works off a stale snapshot. The old flow threaded tour.next through the
+  // search-complete state callback, which captured tour at click time and made
+  // the advance intermittent. The effect below advances on the real panel
+  // transition instead.
+  const tourRef = useRef(tour);
+  tourRef.current = tour;
 
   // url params
   const external_search_params = useLocation().search;
@@ -473,6 +480,19 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   }, [activeRecord, selected_menu]);
 
+  // Advance the tour to the Results step when the results panel actually mounts
+  // (improvement 03). The search runs async and swaps the panel to 'list' on
+  // success; this reacts to that real transition, so the advance is reliable and
+  // fires exactly once (the guard drops after currentStep leaves the search
+  // step). The Results step's before hook then waits for the list DOM to settle.
+  useEffect(() => {
+    if (panel !== 'list') return;
+    const t = tourRef.current;
+    if (t?.active && t?.currentStep?.id === 'catalogosnig:search') {
+      t.next();
+    }
+  }, [panel]);
+
   function setError(message) {
     notify.error('Ocorreu um erro inesperado', message);
   }
@@ -665,7 +685,9 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
     <React.Fragment>
       {catalog_cfg?.show_content_header !== false ? catalog_cfg?.content_header ? <Header config={catalog_cfg} /> : <HeaderSNIG /> : null}
       {/* One tour target over the filters and the Pesquisar button (improvement
-          03): the combined "Filtros e pesquisa" step spotlights both. */}
+          03): the combined "Filtros e pesquisa" step spotlights both. The tour
+          advances to Results from the panel-transition effect above, not from
+          this click, so the search stays a plain search. */}
       <TourTarget id="catalogosnig:search">
         <div>
           <div className="grid pt-3">
@@ -687,15 +709,6 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
                   setSearchParams({
                     ...searchParams,
                     from: 1
-                  });
-                  // Advance the tour to the Results step once the search
-                  // finishes (improvement 03). The callback runs in
-                  // searchCatalog's success path, after setPanel('list'); the
-                  // Results step's before hook then waits for the list to mount.
-                  setSearchCallback(() => () => {
-                    if (tour?.active && tour?.currentStep?.id === 'catalogosnig:search') {
-                      tour.next();
-                    }
                   });
                 }}
               >Pesquisar</Button>
