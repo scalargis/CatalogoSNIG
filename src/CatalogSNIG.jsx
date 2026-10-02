@@ -126,7 +126,7 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   const { createStyle, transformExtent } = Models.MapModel;
   const { getWindowSize } = utils;
 
-  // Guided tour (improvement 03). Null when no TourProvider sits above (the
+  // Guided tour. Null when no TourProvider sits above (the
   // embedded shell), so the search flow below stays safe there.
   const tour = useOptionalTour();
   // Read the live tour handle from a ref so the results-advance effect never
@@ -480,8 +480,8 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
 
   }, [activeRecord, selected_menu]);
 
-  // Advance the tour to the Results step when the results panel actually mounts
-  // (improvement 03). The search runs async and swaps the panel to 'list' on
+  // Advance the tour to the Results step when the results panel actually mounts.
+  // The search runs async and swaps the panel to 'list' on
   // success; this reacts to that real transition, so the advance is reliable and
   // fires exactly once (the guard drops after currentStep leaves the search
   // step). The Results step's before hook then waits for the list DOM to settle.

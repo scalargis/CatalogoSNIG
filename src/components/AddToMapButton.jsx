@@ -16,7 +16,7 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
     return true;
   });
 
-  // The first result's menu is the tour's services target (improvement 03).
+  // The first result's menu is the tour's services target.
   // Control it so the tour before/after hooks can open and close it through the
   // bridge. Other rows keep the plain uncontrolled menu.
   const [opened, setOpened] = useState(false);

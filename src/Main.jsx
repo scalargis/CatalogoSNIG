@@ -10,7 +10,7 @@ import { openServicesMenu, closeServicesMenu, nextTwoFrames } from './onboarding
 import './style.css';
 
 /* ==========================================================================
-   Onboarding: the self path (Phase 5).
+   Onboarding: the self path.
 
    CatalogoSNIG ships its own tour steps. The base help catalog does not hold
    them. Each step id namespaces on the component slug. The step targets an
@@ -83,7 +83,7 @@ registerCatalogosnigOnboarding();
 const tr = (key) => i18next.t(key);
 
 /**
- * Self onboarding steps for CatalogoSNIG (D6). Optional named export next to
+ * Self onboarding steps for CatalogoSNIG. Optional named export next to
  * default/actions/reducers. Orders start at 200, above the base range, so the
  * catalogue steps run after the base tools. title/content use the function
  * form so the popover follows the live locale. The engine and Core.jsx sort
@@ -98,7 +98,7 @@ export const onboardingSteps = [
     content: () => tr('onboarding.catalogosnig.intro.content'),
   },
   {
-    // Filters and search are one step now (improvement 03). The TourTarget in
+    // Filters and search are one step now. The TourTarget in
     // CatalogSNIG.jsx wraps the filter block and the Pesquisar button together.
     // The step does not set advanceOnTargetClick: the search is async and swaps
     // the panel to the results list, so CatalogSNIG advances the tour from a
@@ -116,7 +116,7 @@ export const onboardingSteps = [
     flow: 'viewer',
     // The search runs async and swaps the panel to the results list. Wait two
     // frames so that list mounts and its TourTarget registers before the
-    // controller lands here and the overlay measures (engine D12).
+    // controller lands here and the overlay measures.
     before: async () => { await nextTwoFrames(); },
     title: () => tr('onboarding.catalogosnig.results.title'),
     content: () => tr('onboarding.catalogosnig.results.content'),

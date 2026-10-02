@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Services-menu bridge for the guided tour (improvement 03).
+   Services-menu bridge for the guided tour.
 
    The tour step catalogosnig:add-map spotlights the "+ Mapa" services menu.
    That menu lives deep inside AddToMapButton, but the step's before/after hooks
@@ -34,8 +34,8 @@ export function closeServicesMenu() {
 /**
  * Wait two animation frames. A step before hook calls this after it opens the
  * menu, so the Mantine dropdown mounts and positions and its TourTarget
- * registers before the controller lands the step and the overlay measures
- * (engine D12). Two frames cover the React commit and the passive effects.
+ * registers before the controller lands the step and the overlay measures.
+ * Two frames cover the React commit and the passive effects.
  */
 export function nextTwoFrames() {
   return new Promise((resolve) => {
