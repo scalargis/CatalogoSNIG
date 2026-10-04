@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import i18next from 'i18next';
-import { ActionIcon, LoadingOverlay, Paper, Text } from '@mantine/core';
+import { LoadingOverlay, Paper, Text } from '@mantine/core';
 import { TourTarget } from '@scalargis/ui';
+import { MainMenuButton } from '@scalargis/components';
 
 import Catalogs from './Catalogs';
 import CatalogSNIG from './CatalogSNIG';
@@ -137,37 +138,6 @@ export const onboardingSteps = [
 ];
 
 /**
- * Round main-menu button — the viewer plugin-contract control Core.jsx mounts
- * in the sidebar strip. Mirrors libs/components MainMenuButton: `active`
- * derives from the shell's `p-button-outlined` className contract, and the
- * `p-button-*` tokens are stripped before reaching the DOM.
- */
-function MainMenuButton({ className = '', title, style, icon, onClick, children }) {
-  const isActive = !String(className).includes('p-button-outlined');
-  const passthrough = String(className)
-    .split(/\s+/)
-    .filter((c) => c && !c.startsWith('p-button'))
-    .join(' ');
-
-  return (
-    <ActionIcon
-      type="button"
-      variant={isActive ? 'filled' : 'outline'}
-      size={38}
-      radius="xl"
-      className={passthrough || undefined}
-      style={style}
-      title={title}
-      aria-label={title}
-      aria-pressed={isActive}
-      onClick={onClick}
-    >
-      {children ?? (React.isValidElement(icon) ? icon : <i className={icon} aria-hidden="true" />)}
-    </ActionIcon>
-  );
-}
-
-/**
  * Main menu component
  */
 export function MainMenu({ className, config, actions, record }) {
@@ -180,7 +150,7 @@ export function MainMenu({ className, config, actions, record }) {
         return (
           <MainMenuButton
             title={title}
-            className={className ? className + ' catalog-snig-main-menu-btn' : ''}
+            className={`${className || ''} catalog-snig-main-menu-btn`.trim()}
             style={{ backgroundImage: `url("${record.config_json.btn_image}")` }}
             onClick={e => config.dispatch(actions.viewer_set_selectedmenu(record.id))}
           >
