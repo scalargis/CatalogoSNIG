@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Button, Menu } from '@mantine/core';
 import { IconPlus, IconRefresh, TourTarget } from '@scalargis/ui';
@@ -7,23 +7,29 @@ import { getViewLinks } from '../utils';
 import { registerServicesMenu } from '../onboardingMenuBridge';
 
 
-export default function AddToMapButton({ core, utils, componentConfig, data, className, size, firstResult = false }) {
-
-  const links = (getViewLinks(data) || []).filter((l) => {
+/** The services of a record that the "+ Mapa" menu offers. */
+export function addMapLinks(data, componentConfig) {
+  return (getViewLinks(data) || []).filter((l) => {
     if (Array.isArray(componentConfig?.allow_service_types)) {
       return componentConfig?.allow_service_types.includes(l.type.toUpperCase());
     }
     return true;
   });
+}
 
-  // The first result's menu is the tour's services target.
+export default function AddToMapButton({ core, utils, componentConfig, data, className, size, tourRecord = false }) {
+
+  const links = addMapLinks(data, componentConfig);
+
+  // The tour record's menu is the tour's services target.
   // Control it so the tour before/after hooks can open and close it through the
   // bridge. Other rows keep the plain uncontrolled menu.
   const [opened, setOpened] = useState(false);
+  const buttonRef = useRef(null);
   useEffect(() => {
-    if (!firstResult) return;
-    return registerServicesMenu(setOpened);
-  }, [firstResult]);
+    if (!tourRecord) return;
+    return registerServicesMenu(setOpened, () => buttonRef.current);
+  }, [tourRecord]);
 
   if (!links.length) return null;
 
@@ -38,13 +44,13 @@ export default function AddToMapButton({ core, utils, componentConfig, data, cla
 
   return (
     <Menu shadow="md" position="bottom-end"
-      opened={firstResult ? opened : undefined}
-      onChange={firstResult ? setOpened : undefined}>
+      opened={tourRecord ? opened : undefined}
+      onChange={tourRecord ? setOpened : undefined}>
       <Menu.Target>
-        <Button variant="outline" size={size} className={className} leftSection={<IconPlus />} style={{ flexShrink: 0 }}>Mapa</Button>
+        <Button ref={buttonRef} variant="outline" size={size} className={className} leftSection={<IconPlus />} style={{ flexShrink: 0 }}>Mapa</Button>
       </Menu.Target>
       <Menu.Dropdown>
-        {firstResult
+        {tourRecord
           ? <TourTarget id="catalogosnig:add-map"><div>{items}</div></TourTarget>
           : items}
       </Menu.Dropdown>

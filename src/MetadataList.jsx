@@ -10,6 +10,8 @@ import {
 } from '@scalargis/ui';
 
 import MetadataRecord from './components/MetatadataRecord';
+import { addMapLinks } from './components/AddToMapButton';
+import { registerShowResultsTab } from './onboardingMenuBridge';
 import Summary from './components/Summary';
 import Filters from './components/Filters';
 import { getServiceUrl } from './utils';
@@ -83,6 +85,8 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
 
   const [activeIndex, setActiveIndex] = useState(1);
 
+  useEffect(() => registerShowResultsTab(() => setActiveIndex(1)), []);
+
   const [sortBy, setSortBy] = useState(data?.sortBy);
   const [sortOrder, setSortOrder] = useState(data?.sortOrder);
 
@@ -109,6 +113,8 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
   }
 
   const metadata = Array.isArray(data?.metadata) ? data.metadata : (data?.metadata ? [data?.metadata] : []);
+  const tourRecordIndex = componentConfig?.allow_add_map === false ? -1
+    : metadata.findIndex((record) => addMapLinks(record, componentConfig).length > 0);
   const first = parseInt(data["@from"]-1);
   const rows = data.rows || 20;
   const total = data.summary["@count"];
@@ -173,7 +179,7 @@ export default function MetadataList({ core, viewer, mainMap, utils, actions, co
             <Pager first={first} rows={rows} total={total} onPageChange={onPageChange} />
             <Stack gap="sm">
               {metadata.map((record, idx) => (
-                <MetadataRecord key={idx} {...childProps} data={record} firstResult={idx === 0} />
+                <MetadataRecord key={idx} {...childProps} data={record} tourRecord={idx === tourRecordIndex} />
               ))}
             </Stack>
             <Pager first={first} rows={rows} total={total} onPageChange={onPageChange} />

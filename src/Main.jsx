@@ -6,7 +6,7 @@ import { MainMenuButton, useComponentTour } from '@scalargis/components';
 
 import Catalogs from './Catalogs';
 import CatalogSNIG from './CatalogSNIG';
-import { openServicesMenu, closeServicesMenu, nextTwoFrames } from './onboardingMenuBridge';
+import { openServicesMenu, closeServicesMenu, nextTwoFrames, showResults } from './onboardingMenuBridge';
 
 import './style.css';
 
@@ -124,10 +124,9 @@ export const onboardingSteps = [
     id: 'catalogosnig:results',
     order: 230,
     flow: [TOUR_FLOW, 'viewer'],
-    // The search runs async and swaps the panel to the results list. Wait two
-    // frames so that list mounts and its TourTarget registers before the
-    // controller lands here and the overlay measures.
-    before: async () => { await nextTwoFrames(); },
+    // A user who presses Next without a search gets the search run here. The
+    // step waits for the result list, then shows the results tab.
+    before: async () => { await showResults(); },
     title: () => tr('onboarding.catalogosnig.results.title'),
     content: () => tr('onboarding.catalogosnig.results.content'),
   },
@@ -139,7 +138,7 @@ export const onboardingSteps = [
     id: 'catalogosnig:add-map',
     order: 240,
     flow: [TOUR_FLOW, 'viewer'],
-    before: async () => { openServicesMenu(); await nextTwoFrames(); },
+    before: async () => { await showResults(); openServicesMenu(); await nextTwoFrames(); },
     after: () => { closeServicesMenu(); },
     title: () => tr('onboarding.catalogosnig.addMap.title'),
     content: () => tr('onboarding.catalogosnig.addMap.content'),

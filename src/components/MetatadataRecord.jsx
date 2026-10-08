@@ -47,7 +47,7 @@ const getTopicCat = (data) => {
 }
 
 
-export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data, onRecordHover, onRecordClick, firstResult = false }) {
+export default function MetadataRecord({ core, viewer, mainMap, utils, actions, componentConfig, data, onRecordHover, onRecordClick, tourRecord = false }) {
 
   let metadata_url = componentConfig.url + (componentConfig?.metadata_url || '/srv/por/catalog.search#/metadata/');
   if (metadata_url.indexOf('{uuid}') > -1) {
@@ -66,9 +66,9 @@ export default function MetadataRecord({ core, viewer, mainMap, utils, actions, 
       <DownloadServicesButton core={core} utils={utils} data={data} size={28} className="" />
       { !(componentConfig?.allow_add_map === false) && (
         // The tour's "Adicionar ao mapa" step spotlights the open services menu,
-        // not the button, so the TourTarget lives on the first result's menu
-        // (AddToMapButton, gated on firstResult). No wrapper here.
-        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" firstResult={firstResult} />
+        // not the button, so the TourTarget lives on the menu of the first result
+        // with a service (AddToMapButton, gated on tourRecord). No wrapper here.
+        <AddToMapButton core={core} utils={utils} componentConfig={componentConfig} data={data} size="compact-sm" className="" tourRecord={tourRecord} />
       ) }
     </Group>
   );

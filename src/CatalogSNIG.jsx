@@ -17,6 +17,7 @@ import Filters from './components/Filters';
 import MetadataList from './MetadataList';
 import dataProvider from './utils/dataProvider';
 import { getServiceUrl } from './utils';
+import { isTourSearchPending, registerRunSearch, setListShown } from './onboardingMenuBridge';
 
 
 const defaultFilters = [
@@ -486,12 +487,24 @@ export default function CatalogSNIG({ core, viewer, mainMap, config, actions, ca
   // fires exactly once (the guard drops after currentStep leaves the search
   // step). The Results step's before hook then waits for the list DOM to settle.
   useEffect(() => {
-    if (panel !== 'list') return;
+    const shown = panel === 'list';
+    const tourSearch = isTourSearchPending();
+    setListShown(shown);
+    if (!shown || tourSearch) return;
     const t = tourRef.current;
     if (t?.active && t?.currentStep?.id === 'catalogosnig:search') {
       t.next();
     }
   }, [panel]);
+
+  useEffect(() => () => setListShown(false), []);
+
+  const runTourSearchRef = useRef(null);
+  runTourSearchRef.current = () => {
+    saveMapExtent();
+    setSearchParams({ ...searchParams, from: 1 });
+  };
+  useEffect(() => registerRunSearch(() => runTourSearchRef.current?.()), []);
 
   function setError(message) {
     notify.error('Ocorreu um erro inesperado', message);
