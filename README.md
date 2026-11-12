@@ -1,86 +1,69 @@
-# CatologoSNIG
+# CatalogoSNIG
 
-O CatalogoSNIG permite adicionar aos visualizadores da plataforma ScalarGIS funcionalidades de pesquisa e exploração do catálogo de metadados do Sistema Nacional de Informação Geográfica (SNIG).
+CatalogoSNIG adds a metadata catalogue search to a [ScalarGIS](https://scalargis.com) map viewer. It searches the
+catalogue of SNIG, the Portuguese National Geographic Information System, and adds the map services of a record to the
+map. It also works with any catalogue on [GeoNetwork 3.x](https://geonetwork-opensource.org/manuals/3.12.x/en/index.html),
+and with a list of catalogues.
 
-É um componente de *frontend* do ScalarGIS ([scalargis-client](https://github.com/scalargis/scalargis-client)) e   pode ser adicionado a qualquer visualizador. Configurado por defeito para pesquisar e explorar o [catálogo de metadados do SNIG](https://snig.dgterritorio.gov.pt/rndg), suporta também a integração com qualquer catálogo de metadados baseado em [GeoNetwork 3.x](https://geonetwork-opensource.org/manuals/3.12.x/en/index.html).
+It is a frontend component of the [scalargis-client](https://github.com/scalargis/scalargis-client#readme). It needs
+no server extension: the browser calls the catalogue directly.
 
-# Instalação
+[Live demo](https://demo.scalargis.com/mapa/catalogosnig) · [ScalarGIS docs](https://docs.scalargis.com)
 
-O CatalogoSNIG é um componente de *[frontend](https://github.com/scalargis/scalargis-client)* do ScalarGIS. A sua instalação é feita através da integração da diretoria raiz do seu repositório na diretoria `/packages/viewer/src/components` da projeto scalargis-client. A diretoria `/packages/viewer/src/components` é utilizada para incluir componentes que adicionam novas funcionalidades ao *frontend* do ScalarGIS, permitindo depois que possam ser utilizadas nos visualizadores.
+![Search results of the SNIG catalogue, with the record extents on the map](.github/assets/results.png)
 
-A integração de novos componentes poderá ser feita através de um *clone* do projeto do componente para dentro da diretoria `/packages/viewer/src/components` do scalargis-client. No caso do **CatlalogoSNIG**, seria realizado da seguinte forma:
+## Install
 
-```
-cd scalargis/scalargis-client/packages/viewer/src/components
-git clone https://github.com/scalargis/CatalogoSNIG.git
-```
+1. Put this repo in the components folder of the viewer app of `scalargis-client`. A clone or a symbolic link works:
 
-A operação anterior resulta na criação da seguinte diretoria:
-`/packages/viewer/src/components/CatalogoSNIG`
+   ```powershell
+   cd scalargis-client/apps/viewer/src/app/components
+   git clone https://github.com/scalargis/CatalogoSNIG.git
+   ```
 
-Depois realizada a clonagem do projeto, será necessário fazer novo *build* do viewer do ScalarGIS e *deploy* no scalargis-server:
+   The folder name must be `CatalogoSNIG`.
 
-```
-cd scalargis/scalargis-client
-yarn deploy-server:viewer
-```
+2. Build the viewer and copy it into the server:
 
-# Funcionalidades
+   ```powershell
+   cd scalargis-client
+   npx nx run viewer:build-deploy-server
+   ```
 
-Quando integrado num visualizador disponbibilizado pela plataforma ScalarGIS, o componente CatalogSNIG permite, sem qualquer configuração adicional, a pesquisa e exploração do catálogo de metadados do [Sistema Nacional de Informação Geográfica](https://snig.dgterritorio.gov.pt) (SNIG).
+   For development, restart `npx nx serve viewer` instead.
 
-O componente CatalogoSNIG recria as funcionalidades de pesquisa do Registo Nacional de Dados Geográficos (RNDG) que são disponibilizadas pelo portal do [SNIG](https://snig.dgterritorio.gov.pt/rndg):
+3. Add the component to a viewer config in the backoffice (see [Configuration](#configuration)).
 
-![Alt text](https://user-images.githubusercontent.com/73700749/258099038-64777852-fe9e-40d3-a860-3748623e2780.png "Página de pesquisa do Registo Nacional de Dados Geográficos")
+| Branch | Client line |
+|---|---|
+| `main` | Mantine (current client) |
+| `prime-react` | PrimeReact (old client) |
 
-Para além das pesquisas através dos filtros *"O Quê?"* e *"Onde?"*, são também disponibilizadas ferramentas para:
+## Features
 
-* refinar a pesquisa através da aplicação de outros filtros aos resultados que vão sendo obtidos
-* consultar as fichas de metadados associadas a cada registo
-* consultar e explorar os serviços geográficos associados a cada registo, caso se aplique
-* adicionar ao mapa do visualizador um ou mais temas disponibilizados pelos serviços geográficos associados a um registo de metadados
+With no extra config, the panel gives the search of the
+[SNIG National Register of Geographic Data](https://snig.dgterritorio.gov.pt/rndg). The panel text is in Portuguese.
 
-O ecrã inicial do componente é apresentado conforme a seguinte imagem:
+- **"O quê?" (What?) and "Onde?" (Where?).** Both filters suggest values while the user types. "Onde?" takes a
+  region: a NUTS area, a district, a municipality, or a parish.
 
-![Alt text](https://user-images.githubusercontent.com/73700749/258098996-b1a3d2fd-e2e5-4608-ac39-8b59dc898273.png "Ecrã de inicial do componente CatalogoSNIG")
+  ![The What? and Where? filters with suggestions](.github/assets/filters.png)
 
-As caixas de texto dos filtros *"O Quê?"* e *"Onde?"* apresentam sugestões à medida que o utilizador vai introduzindo o texto a pesquisar:
+- **Results.** "Pesquisar" (Search) runs the search. The results tab lists the records and draws their extents on the
+  map. A summary by classifier refines the search.
+- **Metadata.** Each record opens its full metadata sheet.
+- **"+ Mapa" (Add to map).** The button shows on a record with a WMS, WMTS, or WFS service. It opens the service in the
+  Add Themes wizard, and the chosen layers go to the map and the table of contents.
 
-![Alt text](https://user-images.githubusercontent.com/73700749/258139974-21262e1b-1c1a-4861-8306-a743719c1087.png "Filtros O Quê? e Onde?")
+  ![The service of a record in the Add Themes wizard](.github/assets/add-to-map.png)
 
-A pesquisa é executada através do botão *Pesquisar*, sendo apresentados dois paineis após a sua execução, um com os resultados agregados por classificador e outro com todos os registos devolvidos pela pesquisa.
+"+ Mapa" needs the `ThemeWizard` component in the same viewer.
 
-![Alt text](https://user-images.githubusercontent.com/73700749/258098998-79d7dc3e-4202-4360-b339-0923dd6e9ecb.png "Filtro com os resultados agregados por classificador")
+## Configuration
 
-Através dos resultados agregados por classfificador é possível refinar a pesquisa que foi realizada, permitindo que o utilizador possa acrescentar mais filtros de forma interativa.
+Add an entry to `components` in the viewer config. This entry is enough for the SNIG catalogue:
 
-![Alt text](https://user-images.githubusercontent.com/73700749/258099001-d8f9e68d-2bd4-4b58-af26-4ff1fd213e47.png "Painel de Resultados")
-
-O botão "*+ Mapa*" é apresentado quando o registo de metadados tem um serviço geográfico associado (WMS, WMTS ou WFS), permitindo através dele explorar esse serviço geográfico e adicionar ao mapa do visualizador um ou mais dos seus temas.
-
-![Alt text](https://user-images.githubusercontent.com/73700749/258099012-de48567e-91fa-4cde-ba1f-3ada920da961.png "Adicionar temas dos serviço geográfico")
-
-O tema ou temas selecionados são adicionados ao mapa, passando a constar na tabela de conteúdos, sendo assim possível configurar posteriormente a sua visibilidade e outras propriedades.
-
-![Alt text](https://user-images.githubusercontent.com/73700749/258099018-0c3a47e4-b2aa-4a04-8975-008d979df20f.png "Adicionar temas dos serviço geográfico")
-
-## Outros filtros
-
-Apesar do componente estar orientado por defeito para pesquisar e explorar o catálogo do SNIG, é possível configurá-lo de forma a permitir a sua integração com qualquer outro catálogo baseado na versão 3.x do GeoNetwork. A configuração do componente permite definir os atributos de pesquisa (filtros) mais adaptados a determinado catálogo. A seguinte imagem apresenta o componente configurado para aceder ao catálogo de metadados da [Infraestrtutura de Dados Espaciais Interativa dos Açores](https://sma.idea.azores.gov.pt/geonetwork) (IDEiA):
-
-![Alt text](https://user-images.githubusercontent.com/73700749/258099024-b7db449f-36e9-4148-aeee-90d5fefc2bb8.png "Exemplo de alteração dos atributos de pesquisa")
-
-## Múltiplos catálogos
-
-Este componente também poderá ser configurado de forma a permitir a pesquisa em relação a vários catálogos. Utilizando este tipo de configuração, no topo do ecrã é apresentada uma caixa de seleção com a lista de catálogos de metadados disponíveis para pesquisa. Cada um destes catálogos pode ser configurado com diferentes atributos de pesquisa.
-
-![Alt text](https://user-images.githubusercontent.com/73700749/258098994-0540eea7-4a6f-4f4e-ac51-8879c102d8ea.png "Componente configurado para pesquisa a múltiplos catálogos")
-
-# Configuração
-
-A configuração do componente CatalogoSNIG num visualizador faz-se de forma semlhante à dos outros componentes de *frontend* do ScalarGIS. A seguinte configuração é suficiente para permitir a pesquisa ao catálogo do SNIG:
-
-```
+```json
 {
   "id": "catalogosnig",
   "type": "CatalogoSNIG",
@@ -94,190 +77,95 @@ A configuração do componente CatalogoSNIG num visualizador faz-se de forma sem
 }
 ```
 
-Como se pode verificar pelo exemplo anterior, o componente foi desenvolvido de forma a simplificar o mais possível a integração com o catálogo do SNIG. Caso se pretenda integrar com outro catálogo de metadados (com a limitação de ter que ser baseado em GeoNetwork 3.x),  existem diversos parâmetros que permitem ajustar o componente às características do catálogo a integrar  ou simplesmente para alterar o modo como é realizada a pesquisa ou são apresentados os resultados. Na configuração que se apresenta em seguida constam alguns dos parâmetros que permitem ajustar o comportamento do componente:
+### Main keys
 
-```
+| Key | Default | Effect |
+|---|---|---|
+| `url` | `https://snig.dgterritorio.gov.pt/rndg` | Base URL of the GeoNetwork catalogue |
+| `config_url` | none | Loads the rest of the catalogue config from this JSON URL |
+| `search_action` | `searchCatalogSNIG` | `searchCatalog` for a plain GeoNetwork 3.x catalogue |
+| `filters[]` | the SNIG filters | `id`, `type`, `label`, `query`, and `options` of each filter |
+| `content_header`, `show_content_header` | the SNIG header, `true` | The header of the panel |
+| `sortOptions[]`, `sortBy` | date, entity, title, theme | Sort fields of the result list |
+| `summary` | the default dimensions | The summary by classifier |
+| `allow_add_map` | `true` | `false` hides "+ Mapa" |
+| `allow_service_types` | all | Service types that "+ Mapa" offers, for example `["WMS", "WMTS"]` |
+| `show_extents` | `true` | `false` hides the record extents on the map |
+| `external_search_params` | `false` | `true` reads a search from the page URL |
+
+Filter types: `AnySNIG` and `RegionsSNIG` (the SNIG text and region search), `Any` (free text with suggestions),
+`List` (values from the suggest route), `Tags` (the tags API), `DateRange` (two query fields), and `MapExtent` (the
+map extent).
+
+### Another GeoNetwork 3.x catalogue
+
+Set `url` and `search_action`, and pick the filters that the catalogue supports:
+
+```json
 {
-  "id": "catalogoidea",
+  "id": "mycatalogue",
   "type": "CatalogoSNIG",
-  "title": "Catálogo IDEiA",
-  "icon": "pi pi-briefcase",
+  "title": "My catalogue",
   "target": "mainmenu",
   "config_json": {
-    "classname": "metadata-catalog",
-    "description": "A IDEiA – Infraestrutura de Dados Espaciais Interativa dos Açores constitui um projeto na área dos Sistemas de Informação Geográfica - SIG, que tem como principal objetivo o desenvolvimento e a gestão de uma infraestrutura de dados geográficos (IDE – Infraestrutura de Dados Espaciais) de referência para a Região Açores",
-    "content_header": {
-      "html": "<a href='http://www.ideia.azores.gov.pt/' target='_blank'><img style='width: 50%'' src='http://www.ideia.azores.gov.pt/Style%20Library/css/img/Logo_IDEiA.png' /></a>"
-    },
-    "url": "https://sma.idea.azores.gov.pt/geonetwork",
+    "url": "https://example.org/geonetwork",
     "search_action": "searchCatalog",
     "sortOptions": [
-      {
-        "value": "relevance",
-        "label": "Relevância"
-      },
-      {
-        "value": "title",
-        "label": "Título"
-      }
+      { "value": "relevance", "label": "Relevance" },
+      { "value": "title", "label": "Title" }
     ],
     "sortBy": "relevance",
-    "float_labels": true,
     "filters": [
       {
-        "id": "what",
-        "type": "Any",
-        "label": "O quê?",
-        "query": "anylight",
+        "id": "what", "type": "Any", "label": "What?", "query": "anylight",
         "options": {
-          "multi": true,
-          "forceSelection": false,
-          "suggest": {
-            "path": "/srv/por/suggest",
-            "field": "anylight",
-            "sortBy": "STARTSWITHFIRST",
-            "filterField": "",
-            "filterValue": ""
-          }
+          "multi": true, "forceSelection": false,
+          "suggest": { "path": "/srv/eng/suggest", "field": "anylight", "sortBy": "STARTSWITHFIRST" }
         }
       },
       {
-        "id": "keyword",
-        "type": "List",
-        "label": "Palavra-chave?",
-        "query": "keyword",
+        "id": "topic", "type": "Tags", "label": "Topics", "query": "_cat",
         "options": {
-          "multi": true,
-          "forceSelection": true,
-          "mode": "any",
-          "source": {
-            "type": "suggests",
-            "path": "/srv/por/suggest",
-            "field": "keyword",
-            "sortBy": "STARTSWITHFIRST"
-          }
+          "multi": true, "forceSelection": true, "mode": "any", "field": "code",
+          "source": { "path": "/srv/api/0.1/tags", "lang": "eng" }
         }
       },
       {
-        "id": "orgname",
-        "type": "List",
-        "label": "Entidade Responsável",
-        "query": "orgName",
-        "options": {
-          "multi": true,
-          "forceSelection": true,
-          "mode": "any",
-          "source": {
-            "type": "suggests",
-            "path": "/srv/por/suggest",
-            "field": "orgName",
-            "sortBy": "STARTSWITHFIRST"
-          }
-        }
-      },
-      {
-        "id": "topic",
-        "type": "Tags",
-        "label": "Tópicos",
-        "query": "_cat",
-        "options": {
-          "multi": true,
-          "forceSelection": true,
-          "mode": "any",
-          "field": "code",
-          "source": {
-            "path": "/srv/api/0.1/tags",
-            "lang": "por"
-          }
-        }
-      },
-      {
-        "id": "resource_date",
-        "type": "DateRange",
-        "label": "Criação do Recurso",
-        "query": [
-          "creationDateFrom",
-          "creationDateTo"
-        ]
-      },
-      {
-        "id": "metadata_date",
-        "type": "DateRange",
-        "label": "Criação dos Metadados",
-        "query": [
-          "dateFrom",
-          "dateTo"
-        ]
+        "id": "resource_date", "type": "DateRange", "label": "Resource date",
+        "query": ["creationDateFrom", "creationDateTo"]
       }
     ],
-    "summary": {
-      "use_default": false,
-      "maxDimensions": 5,
-      "strings": {
-        "type": "Tipos de Recursos",
-        "topicCat": "Tópicos",
-        "keyword": "Palavras-chave",
-        "service-view": "Visualização",
-        "service-download": "Descarregamento",
-        "service-discovery": "Pesquisa",
-        "service-transformation": "Processamento"
-      }
-    },
-    "allow_add_map": true,
-    "allow_service_types": [
-      "WMS",
-      "WMTS"
-    ]
+    "allow_service_types": ["WMS", "WMTS"]
   },
   "children": []
 }
 ```
 
-A utilização de múltiplos catálogos pode ser realizada através da seguinte configuração:
+### Several catalogues
 
-```
-{
-  "id": "catalogossnig",
-  "type": "CatalogoSNIG",
-  "title": "Catálogos",
-  "icon": "pi pi-briefcase",
-  "target": "mainmenu",
-  "config_json": {
-    "classname": "metadata-catalog",
-    "show_content_header": true,
-    "catalogs": {
-      "url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/catalogos.json"
-    }
-  },
-  "children": []
+With `catalogs`, the panel opens with a select box of catalogues. Each catalogue has its own filters.
+
+```json
+"config_json": {
+  "show_content_header": true,
+  "catalogs": {
+    "url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/catalogos.json"
+  }
 }
 ```
 
-Como pode ser verificado no exemplo anterior, a definição dos catálogos a utilizar pode ser realizada num ficheiro externo, sendo a localização desse ficheiro especificada através da propriedade `config_json.catalogs.url`. O seguinte código mostra o possível conteúdo de um ficheiro de configuração de catálogos ([ver exemplo mais completo](https://github.com/scalargis/CatalogoSNIG/blob/main/examples/catalogos.json)):
+`catalogs` is a list, or `catalogs.url` names a JSON file with the list. Each item has an `id`, a `title`, and a
+`config_url` to the config of that catalogue:
 
-```
+```json
 [
   {
     "id": "catalogosnig",
     "title": "Catálogo SNIG",
     "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/snig.json",
-    "help": {
-      "as": "external",
-      "url": "https://snig.dgterritorio.gov.pt/rndg"
-    }
-  }, 
-  {
-    "id": "catalogsnig_opendata",
-    "title": "Catálogo SNIG - Dados Abertos",
-    "config_url": "https://raw.githubusercontent.com/scalargis/CatalogoSNIG/main/examples/snig_opendata.json",
-    "help": {
-      "as": "popup",
-      "html": "<div>O Sistema Nacional de Informação Geográfica é uma infraestrutura colaborativa que permite partilhar, pesquisar e aceder a informação geográfica através do Registo Nacional de Dados Geográficos</div>"
-    }
-  }  
+    "help": { "as": "external", "url": "https://snig.dgterritorio.gov.pt/rndg" }
+  }
 ]
 ```
 
-A configuração de cada catálogo também pode ser realizada através de um ficheiro externo, cuja localização é definida na propriedade `config_url`. Diversos exemplos de configuração de catálogos podem ser consultados em:
-[https://github.com/scalargis/CatalogoSNIG/tree/main/examples](https://github.com/scalargis/CatalogoSNIG/tree/main/examples).
-
+The [`examples`](examples) folder holds more catalogue configs.
